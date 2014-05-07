@@ -1,0 +1,18 @@
+<div id="canvasContainer">
+    <div id="canvas">
+        <div class="node"></div>
+    </div>
+
+    <div id="chatContainer" ng-controller="ChatCtrl">
+        <div id="chats">
+            <ul id="chatList">
+                <li ng-repeat="chat in chats">
+                    {{chat.message}}
+                </li>
+            </ul>
+        </div>
+        <div class="chat-input-div">
+            <input type="text" placeholder="say something!" id="chat-input" ng-enter="submitChat(event)"/>
+        </div>
+    </div>
+</div>
