@@ -8,7 +8,7 @@
 module.exports = {
     view: function(req, res) {
         console.log(req.params.id);
-        res.view();
+        res.view({ "roomId" : req.params.id });
     },
     join: function(req, res) {
         //console.log("here");
