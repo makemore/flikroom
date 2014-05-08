@@ -1,0 +1,31 @@
+<h1>Listing rooms</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+<!--
+	<% for(room in model) { %>
+	<tr>
+	  <td><%= model[room].name %></td>
+    <td><a href="/user/show/<%= model[room].id %>">Show</a></td>
+    <td><a href="/user/edit/<%= model[room].id %>">Edit</a></td>
+	<% } %>
+	</tr>
+-->
+
+  <% _.each(model, function (room) { %>
+  <tr>
+    <td><%= room.name %></td>
+    <td><a href="/room/view/<%= room.id %>">View</a></td>
+    <td><a href="/room/edit/<%= room.id %>">Edit</a></td>
+     <td><a href="/room/destroy/<%= room.id %>">Delete</a></td>
+  <% }) %>
+  </tr>
+</table>
+<br />
+
+<a href="/room/new">New Room</a>

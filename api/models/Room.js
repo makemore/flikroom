@@ -15,7 +15,6 @@ module.exports = {
           collection: 'chat',
           via: 'room'
       }
-      
   }
 };
 

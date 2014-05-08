@@ -4,7 +4,9 @@
     </div>
 
     <div id="chatContainer" ng-controller="ChatCtrl">
+
         <div id="chats">
+            <li><%= room.name%></li>
             <ul id="chatList">
                 <li ng-repeat="chat in chats">
                     {{chat.message}}
@@ -18,5 +20,5 @@
 </div>
 
 <script>
-    alert(<%= roomId %>);
+    var roomId = <%= room.id %>;
 </script>

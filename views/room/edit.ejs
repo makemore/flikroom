@@ -1,0 +1,9 @@
+<h1> Editing Room </h1>
+<form action="/room/update/<%= room.id %>" method="POST">
+
+	<div>Name: <input value="<%= room.name %>" name="name" type="text"/></div>
+	<input type="submit"/>
+</form>
+
+<a href="/room/edit/<%= room.id %>">Edit</a> |
+<a href="/room/list">Back</a>

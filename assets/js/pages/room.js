@@ -34,16 +34,16 @@ $(document).ready(function(){
 
     $("#canvas").on("dblclick", function(e){
         addNodeToCanvas("temp", e.offsetX - 50, e.offsetY - 50);
-        io.socket.post("/node", {x:e.offsetX - 50, y:e.offsetY - 50}, function(response){
+        io.socket.post("/node", {x:e.offsetX - 50, y:e.offsetY - 50, room: roomId}, function(response){
             $("#node-temp").attr("id", "node-" + response.id);
         });
     });
 
     io.socket.on("node", function(node){
         //console.log(node);
-        if (node.verb == "created") {
+        if (node.verb == "created" && node.data.room == roomId) {
             addNodeToCanvas(node.data.id, node.data.x,node.data.y);
-        } else if (node.verb == "updated")
+        } else if (node.verb == "updated" && node.data.room == roomId)
         {
             console.log(node);
             $("#node-" + node.id).css("left", node.data.x);
@@ -52,7 +52,7 @@ $(document).ready(function(){
 
     });
 
-    io.socket.request("/node", null, function(nodes){
+    io.socket.request("/node?room=" + roomId, null, function(nodes){
         for (var i = 0; i < nodes.length; i++)
         {
             addNodeToCanvas(nodes[i].id, nodes[i].x, nodes[i].y);

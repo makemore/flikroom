@@ -65,7 +65,7 @@ flikApp.controller('ChatCtrl', function ($scope, socket) {
 
     $("#chats").animate({ scrollTop: $("#chats")[0].scrollHeight}, 1000);
 
-    socket.request("/chat", null, function(chats){
+    socket.request("/chat?room=" + roomId, null, function(chats){
         $scope.chats = chats;
     });
 
@@ -76,7 +76,7 @@ flikApp.controller('ChatCtrl', function ($scope, socket) {
 
     socket.on("chat", function(chat){
         //console.log(chat);
-        if (chat.verb == "created") {
+        if (chat.verb == "created" && chat.data.room == roomId) {
             $scope.chats.push(chat.data);
         }
     });
@@ -87,7 +87,7 @@ flikApp.controller('ChatCtrl', function ($scope, socket) {
         //    // create a new chat
         //});
         $scope.chats.push({ message : $(event.target).val()});
-        io.socket.post("/chat", {message: $(event.target).val(), user:1,room:1}, function(response){
+        io.socket.post("/chat", {message: $(event.target).val(), user:1,room:roomId}, function(response){
             //console.log(response);
             //$scope.apply();
         });
