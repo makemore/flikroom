@@ -9,7 +9,7 @@
             <li><%= room.name%></li>
             <ul id="chatList">
                 <li ng-repeat="chat in chats">
-                    {{chat.message}}
+                    {{chat.user.username }} - {{chat.message}}
                 </li>
             </ul>
         </div>
@@ -21,4 +21,5 @@
 
 <script>
     var roomId = <%= room.id %>;
+    var userId = <%= userId %>;
 </script>

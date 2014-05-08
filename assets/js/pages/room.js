@@ -33,8 +33,14 @@ $(document).ready(function(){
 
 
     $("#canvas").on("dblclick", function(e){
+        if (userId == undefined)
+        {
+            alert("must be logged in for this");
+            return;
+        }
+
         addNodeToCanvas("temp", e.offsetX - 50, e.offsetY - 50);
-        io.socket.post("/node", {x:e.offsetX - 50, y:e.offsetY - 50, room: roomId}, function(response){
+        io.socket.post("/node", {x:e.offsetX - 50, y:e.offsetY - 50, room: roomId, user: userId}, function(response){
             $("#node-temp").attr("id", "node-" + response.id);
         });
     });

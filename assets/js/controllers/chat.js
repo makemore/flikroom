@@ -86,11 +86,19 @@ flikApp.controller('ChatCtrl', function ($scope, socket) {
         //socket.post('/chat',{message: $(event.target).val()}, function (response) {
         //    // create a new chat
         //});
+
+        if (userId == undefined)
+        {
+            alert("must be logged in for this");
+            return;
+        }
         $scope.chats.push({ message : $(event.target).val()});
-        io.socket.post("/chat", {message: $(event.target).val(), user:1,room:roomId}, function(response){
+
+        io.socket.post("/chat", {message: $(event.target).val(), user:userId,room:roomId}, function(response){
             //console.log(response);
             //$scope.apply();
         });
+
         $(event.target).val("");
         $("#chats").animate({ scrollTop: $("#chats")[0].scrollHeight}, 1000);
     }

@@ -11,9 +11,11 @@
  ---------------------*/
 var RoomController = {
     view: function(req, res) {
-        console.log(req.params.id);
+        //console.log(req.params.id);
 
         //res.view({ roomId: req.params.id});
+
+        console.log("user: " + req.session.user);
 
         var id = req.params.id;
         if (!id) return res.send("No id specified.", 500);
@@ -23,7 +25,8 @@ var RoomController = {
             if(err) return res.sender(err,500);
             if(!room) return res.send("Room "+id+" not found", 404);
             res.view({
-                "room":room[0]
+                "room":room[0],
+                "userId": req.session.user
             })
         });
 
@@ -67,11 +70,8 @@ var RoomController = {
     },
 
     list: function (req, res) {
-        console.log("test");
         Room.find(function(err, rooms){
-            console.log("here");
             if (err) return res.send(err, 500);
-            console.log(rooms);
             res.view({
                 model: rooms
             });
@@ -97,7 +97,6 @@ var RoomController = {
         var id = req.params.id;
 
         if (!id) return res.send("No id specified.",500);
-        console.log(id);
         Room.find(id, function roomFound (err,room){
             if (err) return res.send(err,500);
             if (!room) return res.send("Room "+id+" not found.",404);
