@@ -2,7 +2,16 @@
  * Created by chris on 06/05/2014.
  */
 
-
+$.fn.enterKey = function (fnc) {
+    return this.each(function () {
+        $(this).keypress(function (ev) {
+            var keycode = (ev.keyCode ? ev.keyCode : ev.which);
+            if (keycode == '13') {
+                fnc.call(this, ev);
+            }
+        })
+    })
+}
 
 $.fn.pressEnter = function(fn) {
 
@@ -33,10 +42,58 @@ $(document).ready(function(){
 
 
     $("#canvas").on("dblclick", function(e){
-        //var input = _.template()
-
-
+        var inputField = $.tmpl($("#tmpl-search-box").html(), { left: e.offsetX, top: e.offsetY});
+        inputField = $(inputField);
+        $("#canvas").append(inputField);
         var youtube = new YouTubeFlik("YouTube", e.offsetX, e.offsetY);
+
+        inputField.focus();
+
+        inputField.keypress(function(event) {
+            if (event.keyCode == 13) {
+                console.log("here");
+                io.socket.request("/scrape/getLinksFromUrl", { url : $(this).val() }, function(links){
+                    console.log(links);
+                });
+
+
+              //  youtube.init();
+              //  $(this).remove();
+            } else {
+               // var val = $(this).val();
+               // if (val.length > 1) {
+               //     youtube.search($(this).val());
+               // }
+            }
+        });
+
+
+        /*
+        inputField.autocomplete({
+            source: function(request, outerResponse)
+            {
+                console.log("testing");
+                youtube.search(request.term, function(response){
+                    console.log(response);
+                    outerResponse( $.map( response.items, function(item) {
+                        console.log(item);
+                        return {
+                            label: item.snippet.title,
+                            value: item.id.videoId
+                        }
+                    }));
+                });
+                //console.log(test);
+            },
+            minLength: 2,
+            select: function( event, ui ) {
+                youtube.init(ui.item.value);
+                inputField.remove();
+            }
+        });
+        */
+
+        //var youtube = new YouTubeFlik("YouTube", e.offsetX, e.offsetY);
 
 
         //if (userId == undefined)

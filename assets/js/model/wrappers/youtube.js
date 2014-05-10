@@ -33,7 +33,6 @@ var YouTubeFlik = function(name, x, y){
   this.name = name;
   this.x = x;
   this.y = y;
-  this.init();
 };
 
 //Add dynamically to the already defined object a new getter
@@ -41,10 +40,32 @@ YouTubeFlik.prototype.getName = function() {
     return this.name;
 };
 
-YouTubeFlik.prototype.init = function() {
+
+YouTubeFlik.prototype.search = function(term, callback){
+    var request = gapi.client.youtube.search.list({
+        q: term,
+        part: 'snippet'
+    });
+
+    request.execute(function(response) {
+        //var responseArray = [];
+        //for(var i = 0; i<response.items.length; i++)
+        //{
+        //    responseArray.push(response.items[i].snippet.title)
+        //}
+        // return response;
+        callback(response);
+        //var str = JSON.stringify(response.result);
+        //$('#search-container').html('<pre>' + str + '</pre>');
+        //console.log()
+    });
+}
+
+YouTubeFlik.prototype.init = function(id) {
     var rndNum = Math.floor((Math.random() * 10000) + 1);
-    var insert = "<div id='player" + rndNum + "' class='node-youtube' style='left:" + this.x + "px;top:" + this.y + "px;'></div>";
-    $("#canvas").append(insert);
+    var video = "<div id='player" + rndNum + "' class='node-youtube' style='left:" + this.x + "px;top:" + this.y + "px;'></div>";
+    $("#canvas").append(video);
+
 
 
 
@@ -63,7 +84,7 @@ YouTubeFlik.prototype.init = function() {
     }
     else
     {
-        console.log("YT is not undefined")
+        console.log("YT is not undefined");
         addPlayer(rndNum);
     }
 
@@ -72,7 +93,7 @@ YouTubeFlik.prototype.init = function() {
         YouTubeFlik.prototype.player = new YT.Player('player' + rndNum, {
             height: '290',
             width: '340',
-            videoId: 'M7lc1UVf-VE',
+            videoId: id,
             events: {
                 'onReady': onPlayerReady,
                 'onStateChange': onPlayerStateChange

@@ -24,6 +24,10 @@ html, body
     position: absolute;
 }
 
+.absolute{
+    position: absolute;
+}
+
 .node-youtube{
     position: absolute;
 }
