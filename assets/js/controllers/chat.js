@@ -87,11 +87,11 @@ flikApp.controller('ChatCtrl', function ($scope, socket) {
         //    // create a new chat
         //});
 
-        if (userId == undefined)
-        {
-            alert("must be logged in for this");
-            return;
-        }
+            if (userId == undefined)
+            {
+                alert("must be logged in for this");
+                return;
+            }
         $scope.chats.push({ message : $(event.target).val()});
 
         io.socket.post("/chat", {message: $(event.target).val(), user:userId,room:roomId}, function(response){

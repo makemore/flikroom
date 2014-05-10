@@ -24,6 +24,11 @@ html, body
     position: absolute;
 }
 
+.node-youtube{
+    position: absolute;
+}
+
+
 #chatContainer{
     width:300px;
     height:400px;
