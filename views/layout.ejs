@@ -94,35 +94,29 @@
     -->
 
     <!--SCRIPTS-->
+    <script src="/js/dependencies/URI.js"></script>
     <script src="/js/dependencies/angular.js"></script>
     <script src="/js/dependencies/jquery-1.10.2.js"></script>
     <script src="/js/dependencies/jquery-ui-1.10.4.js"></script>
+    <script src="/js/dependencies/jquery.URI.js"></script>
     <script src="/js/dependencies/jquery.tmpl.js"></script>
+    <script src="/js/dependencies/jquery.validate.js"></script>
+    <script src="/js/dependencies/linq.js"></script>
     <script src="/js/dependencies/sails.io.js"></script>
     <script src="/js/dependencies/underscore.js"></script>
     <script src="/js/_crud.js"></script>
     <script src="/js/controllers/chat.js"></script>
-    <script src="/js/model/wrappers/youtube.js"></script>
+    <script src="/js/controllers/omnibox.js"></script>
+    <script src="/js/model/wrappers/youtube-player.js"></script>
+    <script src="/js/model/wrappers/youtube-search.js"></script>
     <script src="/js/pages/room.js"></script>
     <script src="/js/services/angular-socket-io.js"></script>
+    <script src="/js/view/orbit-results.js"></script>
     <!--SCRIPTS END-->
 
 
 
-    <script>
-        function load() {
-            console.log("google api ready");
 
-            gapi.client.setApiKey('AIzaSyBaKhPo_fVbVtM5ZFvEhGv2pAz7bJDCQcE');
-            //gapi.client.load('urlshortener', 'v1', makeRequest);
-
-            gapi.client.load('youtube', 'v3', function() {
-                //handleAPILoaded();
-                console.log("youtube data api loaded");
-            });
-        }
-    </script>
-    <script src="https://apis.google.com/js/client.js?onload=load"></script>
 
   </body>
 </html>

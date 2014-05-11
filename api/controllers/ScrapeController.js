@@ -7,22 +7,27 @@
 
 module.exports = {
     getLinksFromUrl: function(req, res) {
-        var url = req.param('url');
+        //var url = req.param('url');
+        var searchTerm = req.param('url');
+        var url = 'http://www.bing.com/search?q=' + searchTerm;
         var request = require('request')
             , cheerio = require('cheerio');
         console.log(url);
 
         request("http://" + url, function (error, response, body) {
             if (!error && response.statusCode == 200) {
-                console.log(body) // Print the google web page.
+                //console.log(body) // Print the google web page.
 
                 $ = cheerio.load(body);
-                var links = $('a'); //use your CSS selector here
-                //console.log(body);
-
+                //var links = $('a'); //use your CSS selector here
+                var links = $('.sb_tlst h3 a');
+                var responseArray = []
                 $(links).each(function(i, link){
-                    console.log($(link).text() + ':\n  ' + $(link).attr('href'));
+                    //console.log($(link).text() + ':\n  ' + $(link).attr('href'));
+                    responseArray.push($(link).attr('href'));
                 });
+                res.send(responseArray);
+
             }
         })
 
@@ -66,7 +71,7 @@ module.exports = {
         $.html();
         //=> <h2 class="title welcome">Hello there!</h2>
         */
-        res.send(url);
+
     }
 };
 

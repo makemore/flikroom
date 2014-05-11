@@ -29,47 +29,25 @@
 
  */
 
-var YouTubeFlik = function(name, x, y){
+var YouTubePlayer = function(name, x, y){
   this.name = name;
   this.x = x;
   this.y = y;
 };
 
 //Add dynamically to the already defined object a new getter
-YouTubeFlik.prototype.getName = function() {
+YouTubePlayer.prototype.getName = function() {
     return this.name;
 };
 
 
-YouTubeFlik.prototype.search = function(term, callback){
-    var request = gapi.client.youtube.search.list({
-        q: term,
-        part: 'snippet'
-    });
 
-    request.execute(function(response) {
-        //var responseArray = [];
-        //for(var i = 0; i<response.items.length; i++)
-        //{
-        //    responseArray.push(response.items[i].snippet.title)
-        //}
-        // return response;
-        callback(response);
-        //var str = JSON.stringify(response.result);
-        //$('#search-container').html('<pre>' + str + '</pre>');
-        //console.log()
-    });
-}
 
-YouTubeFlik.prototype.init = function(id) {
+YouTubePlayer.prototype.init = function(id) {
     var rndNum = Math.floor((Math.random() * 10000) + 1);
     var video = "<div id='player" + rndNum + "' class='node-youtube' style='left:" + this.x + "px;top:" + this.y + "px;'></div>";
     $("#canvas").append(video);
-
-
-
-
-    //YouTubeFlik.prototype.player;
+    //YouTubePlayer.prototype.player;
     //console.log(YT);
     if (window.YT === undefined) {
         console.log("YT is undefined");
@@ -90,7 +68,7 @@ YouTubeFlik.prototype.init = function(id) {
 
 
     function addPlayer(rndNum){
-        YouTubeFlik.prototype.player = new YT.Player('player' + rndNum, {
+        YouTubePlayer.prototype.player = new YT.Player('player' + rndNum, {
             height: '290',
             width: '340',
             videoId: id,
@@ -124,9 +102,9 @@ YouTubeFlik.prototype.init = function(id) {
 
 
 //Create a new object of type Person
-//var youtube = new YouTubeFlik("YouTube", 5000, 5000);
+//var youtube = new YouTubePlayer("YouTube", 5000, 5000);
 
-YouTubeFlik.prototype.sayMyName = function() {
+YouTubePlayer.prototype.sayMyName = function() {
     alert('Hello, my name is ' + this.getName());
 };
 
