@@ -31,12 +31,12 @@ OmniBox.prototype.init = function(){
             }
             else if (link.is("relative"))
             {
-                var searchResult = {
-                    type : "youtube" + that.numberOfResults,
-                    results : ["result1", "result2", "result3"]
-                }
-                that.numberOfResults++;
-                orbiter.addResultSet(searchResult);
+                var youtubeSearch = new YouTubeSearch("youtube");
+                youtubeSearch.search($(this).val(), function(response){
+                    orbiter.addResultSet(response);
+                });
+
+                //orbiter.addResultSet(searchResult);
                 console.log("relative");
             }
             else if (link.is("urn"))

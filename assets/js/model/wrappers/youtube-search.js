@@ -5,6 +5,7 @@
 var YouTubeSearch = function(name){
     this.name = name;
     this.init();
+    this.template = "tmpl-result-node-youtube";
 };
 
 
@@ -34,21 +35,25 @@ YouTubeSearch.prototype.init = function(){
 
 
 YouTubeSearch.prototype.search = function(term, callback){
+    var that = this;
     var request = gapi.client.youtube.search.list({
         q: term,
         part: 'snippet'
     });
 
-    request.execute(function(response) {
-        //var responseArray = [];
-        //for(var i = 0; i<response.items.length; i++)
-        //{
-        //    responseArray.push(response.items[i].snippet.title)
-        //}
-        // return response;
+    request.execute(function(youtubeData) {
+        console.log(youtubeData);
+        var response = {};
+        response.type = "youtube";
+        response.template = that.template;
+        response.results = [];
+        for (var i=0;i<youtubeData.items.length;i++)
+        {
+            var item = {}
+            item.title = youtubeData.items[i].snippet.title;
+            item.image = youtubeData.items[i].snippet.thumbnails.default.url;
+            response.results.push(item);
+        }
         callback(response);
-        //var str = JSON.stringify(response.result);
-        //$('#search-container').html('<pre>' + str + '</pre>');
-        //console.log()
     });
 }
