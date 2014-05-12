@@ -32,6 +32,10 @@ OmniBox.prototype.init = function(){
             else if (link.is("relative"))
             {
                 var youtubeSearch = new YouTubeSearch("youtube");
+
+                //this line adds the type of result to the page, before waiting to fill it up with results
+                //orbiter.addResultSet({ type: "youtube", results:[]});
+
                 youtubeSearch.search($(this).val(), function(response){
                     orbiter.addResultSet(response);
                 });

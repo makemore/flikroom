@@ -37,8 +37,8 @@ $(document).ready(function(){
     $(".thing").draggable();
     var width = $("#canvas").width();
     var height = $("#canvas").height();
-    // $("#canvas").css("left", -Math.abs(width / 2));
-    // $("#canvas").css("top", -Math.abs(height / 2));
+    $("#canvas").css("left", -Math.abs(width / 2));
+    $("#canvas").css("top", -Math.abs(height / 2));
 
 
     $("#canvas").on("dblclick", function(e){
