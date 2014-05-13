@@ -9,6 +9,7 @@ var YouTubeSearch = function(name){
     this.template = "tmpl-result-node-youtube";
     this.cssClass = ".node-youtube";
     this.results = [];
+    this.id = "youtubeSearch";
 };
 
 

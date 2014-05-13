@@ -9,6 +9,7 @@ var BingSearch = function(){
     this.type = "bing";
     this.results = [];
     //this.init();
+    this.id = "bingSearch";
 };
 
 
@@ -29,6 +30,7 @@ BingSearch.prototype.search = function(term, callback)
             //item.image = results.searchResponse.Web.Results[i].snippet.thumbnails.default.url;
             that.results.push(item);
         }
+        console.log(that);
         callback(that);
     });
 }

@@ -40,6 +40,11 @@ html, body
     position: absolute;
 }
 
+.node-bing{
+    position: absolute;
+    background-color: white;
+}
+
 
 #chatContainer{
     width:300px;

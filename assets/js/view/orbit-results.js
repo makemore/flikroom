@@ -37,9 +37,17 @@ OrbitResults.prototype.render = function(){
         // I just left the number of items in the final argument
         var x = this.x + 80 + rad * Math.cos(2 * Math.PI * i / this.searchResults.length);
         var y = this.y - 8 + rad * Math.sin(2 * Math.PI * i / this.searchResults.length);
-        var searchNode = $.tmpl($("#tmpl-search-node").html(), { left: x, top: y, type:this.searchResults[i].results.length});
+        var searchNode = $.tmpl($("#tmpl-search-node").html(), {
+            left: x,
+            top: y,
+            type:this.searchResults[i].results.length,
+            id: this.searchResults[i].id
+        });
         $("#canvas").append(searchNode);
-        $(searchNode).on("mouseenter", function(){
+        console.log(that.searchResults[i].id);
+        $("#" + this.searchResults[i].id).on("mouseenter", function(){
+            console.log(that.searchResults[i-1]);
+            console.log(that.searchResults[i-1].template);
             for(var j=0; j<that.searchResults[i-1].results.length;j++)
             {
                 var x = that.x + 80 + (rad + (rad + (j * 150)))  * Math.cos(2 * Math.PI * i / that.searchResults.length);
@@ -47,13 +55,15 @@ OrbitResults.prototype.render = function(){
                 var resultNode = $.tmpl($("#" +  that.searchResults[i-1].template).html(), {
                     left: x,
                     top: y,
-                    type:that.searchResults[i-1].results[j].title,
+                    title:that.searchResults[i-1].results[j].title,
                     image:that.searchResults[i-1].results[j].image
                 });
                 $("#canvas").append(resultNode);
             }
         });
+
         $(searchNode).on("mouseout", function(){
+
             $(that.searchResults[i-1].cssClass).remove();
         });
 
