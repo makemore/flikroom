@@ -6,6 +6,8 @@ var YouTubeSearch = function(name){
     this.name = name;
     this.init();
     this.template = "tmpl-result-node-youtube";
+    this.cssClass = ".node-youtube";
+    this.results = [];
 };
 
 
@@ -42,18 +44,13 @@ YouTubeSearch.prototype.search = function(term, callback){
     });
 
     request.execute(function(youtubeData) {
-        console.log(youtubeData);
-        var response = {};
-        response.type = "youtube";
-        response.template = that.template;
-        response.results = [];
         for (var i=0;i<youtubeData.items.length;i++)
         {
             var item = {}
             item.title = youtubeData.items[i].snippet.title;
             item.image = youtubeData.items[i].snippet.thumbnails.default.url;
-            response.results.push(item);
+            that.results.push(item);
         }
-        callback(response);
+        callback(that);
     });
 }

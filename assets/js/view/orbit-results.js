@@ -42,8 +42,8 @@ OrbitResults.prototype.render = function(){
         $(searchNode).on("mouseenter", function(){
             for(var j=0; j<that.searchResults[i-1].results.length;j++)
             {
-                var x = that.x + 80 + (rad + (j * 150))  * Math.cos(2 * Math.PI * i / that.searchResults.length);
-                var y = that.y - 8 + (rad + (j * 150)) * Math.sin(2 * Math.PI * i / that.searchResults.length);
+                var x = that.x + 80 + (rad + (rad + (j * 150)))  * Math.cos(2 * Math.PI * i / that.searchResults.length);
+                var y = that.y - 8 + (rad + (rad + (j * 150))) * Math.sin(2 * Math.PI * i / that.searchResults.length);
                 var resultNode = $.tmpl($("#" +  that.searchResults[i-1].template).html(), {
                     left: x,
                     top: y,
@@ -52,6 +52,9 @@ OrbitResults.prototype.render = function(){
                 });
                 $("#canvas").append(resultNode);
             }
+        });
+        $(searchNode).on("mouseout", function(){
+            $(that.searchResults[i-1].cssClass).remove();
         });
 
     }
