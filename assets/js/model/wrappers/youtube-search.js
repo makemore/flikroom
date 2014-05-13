@@ -4,6 +4,7 @@
 
 var YouTubeSearch = function(name){
     this.name = name;
+    this.type = "youtube";
     this.init();
     this.template = "tmpl-result-node-youtube";
     this.cssClass = ".node-youtube";
