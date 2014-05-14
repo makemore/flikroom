@@ -4,11 +4,14 @@
 
 
 <script type="text/x-handlebars-template" id="tmpl-search-node">
-    "<div class='small-circle' id="${id}" style="left:${left}px; top:${top}px;"></div>"
+    <div class='small-circle' id="${id}" style="left:${left}px; top:${top}px;">${type}${numberOfResults}</div>
 </script>
 
 <script type="text/x-handlebars-template" id="tmpl-result-node-youtube">
-    <div class='node-youtube' style="left:${left}px; top:${top}px;"><img src="${image}"/></div>
+    <div class='node-youtube' style="left:${left}px; top:${top}px;">
+        <div>${title}</div>
+        <div><img src="${image}"/></div>
+    </div>
 </script>
 
 <script type="text/x-handlebars-template" id="tmpl-result-node-bing">

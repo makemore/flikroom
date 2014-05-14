@@ -32,6 +32,7 @@ OrbitResults.prototype.render = function(){
     var rad = 140;
     $(".small-circle").remove();
     var that = this;
+    console.log(this.searchResults.length);
     for(var i = 0; i < this.searchResults.length; i++) {
         //This for just looping around in a circle (actually it works fine,
         // I just left the number of items in the final argument
@@ -40,32 +41,47 @@ OrbitResults.prototype.render = function(){
         var searchNode = $.tmpl($("#tmpl-search-node").html(), {
             left: x,
             top: y,
-            type:this.searchResults[i].results.length,
-            id: this.searchResults[i].id
+            type:this.searchResults[i].type,
+            id: this.searchResults[i].id,
+            numberOfResults: this.searchResults[i].results.length
         });
-        $("#canvas").append(searchNode);
-        console.log(that.searchResults[i].id);
-        $("#" + this.searchResults[i].id).on("mouseenter", function(){
-            console.log(that.searchResults[i-1]);
-            console.log(that.searchResults[i-1].template);
-            for(var j=0; j<that.searchResults[i-1].results.length;j++)
-            {
-                var x = that.x + 80 + (rad + (rad + (j * 150)))  * Math.cos(2 * Math.PI * i / that.searchResults.length);
-                var y = that.y - 8 + (rad + (rad + (j * 150))) * Math.sin(2 * Math.PI * i / that.searchResults.length);
-                var resultNode = $.tmpl($("#" +  that.searchResults[i-1].template).html(), {
-                    left: x,
-                    top: y,
-                    title:that.searchResults[i-1].results[j].title,
-                    image:that.searchResults[i-1].results[j].image
-                });
-                $("#canvas").append(resultNode);
+
+        //Fucking stupid code, but it works, must do better property lookup search here
+        $(searchNode).on("mouseenter", function () {
+            for (var i = 0; i < that.searchResults.length; i++){
+                if (that.searchResults[i].id === $(this).attr("id"))
+                {
+                    //console.log(that.searchResults[i]);
+                    for (var j = 0; j < that.searchResults[i].results.length; j++) {
+                        var x = that.x + 80 + (rad + (rad + (j * 150))) * Math.cos(2 * Math.PI * i / that.searchResults.length);
+                        var y = that.y - 8 + (rad + (rad + (j * 150))) * Math.sin(2 * Math.PI * i / that.searchResults.length);
+                        var resultNode = $.tmpl($("#" + that.searchResults[i].template).html(), {
+                            left: x,
+                            top: y,
+                            title: that.searchResults[i].results[j].title,
+                            image: that.searchResults[i].results[j].image
+                        });
+                        $("#canvas").append(resultNode);
+                    }
+                }
             }
         });
 
-        $(searchNode).on("mouseout", function(){
-
-            $(that.searchResults[i-1].cssClass).remove();
+        $(searchNode).on("mouseout", function () {
+            for (var i = 0; i < that.searchResults.length; i++) {
+                if (that.searchResults[i].id === $(this).attr("id")) {
+                    $(that.searchResults[i].cssClass).remove();
+                }
+            }
         });
 
+
+        $("#canvas").append(searchNode);
+        //console.log(this.searchResults[i].id);
+        //console.log(i);
     }
+
+
+
+
 }

@@ -3,13 +3,12 @@
  */
 
 var BingSearch = function(){
-
     this.template = "tmpl-result-node-bing";
     this.cssClass = ".node-bing";
     this.type = "bing";
     this.results = [];
-    //this.init();
     this.id = "bingSearch";
+    this.mock = true;
 };
 
 
@@ -19,19 +18,28 @@ var BingSearch = function(){
 BingSearch.prototype.search = function(term, callback)
 {
     var that = this;
-    io.socket.request("/scrape/bingSearch", { term : term }, function(results){
-        //
-        console.log(results);
-
-        for (var i=0;i<results.SearchResponse.Web.Results.length;i++)
-        {
+    if (!this.mock) {
+        io.socket.request("/scrape/bingSearch", { term: term }, function (results) {
+            //
+            for (var i = 0; i < results.SearchResponse.Web.Results.length; i++) {
+                var item = {}
+                item.title = results.SearchResponse.Web.Results[i].Title;
+                //item.image = results.searchResponse.Web.Results[i].snippet.thumbnails.default.url;
+                that.results.push(item);
+            }
+            callback(that);
+        });
+    }
+    else
+    {
+        //mock data for testing
+        for (var i = 0; i < 10; i++) {
             var item = {}
-            item.title = results.SearchResponse.Web.Results[i].Title;
-            //item.image = results.searchResponse.Web.Results[i].snippet.thumbnails.default.url;
+            item.title = "bing result " + i.toString();
             that.results.push(item);
         }
-        console.log(that);
         callback(that);
-    });
+    }
 }
+
 

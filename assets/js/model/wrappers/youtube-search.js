@@ -5,11 +5,18 @@
 var YouTubeSearch = function(name){
     this.name = name;
     this.type = "youtube";
-    this.init();
     this.template = "tmpl-result-node-youtube";
     this.cssClass = ".node-youtube";
     this.results = [];
     this.id = "youtubeSearch";
+
+
+    this.mock = true;
+    if (!this.mock)
+    {
+        this.init();
+    }
+
 };
 
 
@@ -40,19 +47,32 @@ YouTubeSearch.prototype.init = function(){
 
 YouTubeSearch.prototype.search = function(term, callback){
     var that = this;
-    var request = gapi.client.youtube.search.list({
-        q: term,
-        part: 'snippet'
-    });
+    if (!this.mock) {
+        var request = gapi.client.youtube.search.list({
+            q: term,
+            part: 'snippet'
+        });
 
-    request.execute(function(youtubeData) {
-        for (var i=0;i<youtubeData.items.length;i++)
-        {
+        request.execute(function (youtubeData) {
+            for (var i = 0; i < youtubeData.items.length; i++) {
+                var item = {}
+                item.title = youtubeData.items[i].snippet.title;
+                item.image = youtubeData.items[i].snippet.thumbnails.default.url;
+                that.results.push(item);
+            }
+            callback(that);
+        });
+    }
+    else
+    {
+        //mock data for testing
+        for (var i = 0; i < 10; i++) {
             var item = {}
-            item.title = youtubeData.items[i].snippet.title;
-            item.image = youtubeData.items[i].snippet.thumbnails.default.url;
+            item.title = "dummy item " + i.toString();
+            //item.image = youtubeData.items[i].snippet.thumbnails.default.url;
             that.results.push(item);
         }
         callback(that);
-    });
+    }
+
 }
