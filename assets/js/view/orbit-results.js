@@ -29,15 +29,15 @@ OrbitResults.prototype.addResultSet = function(searchResult){
 }
 
 OrbitResults.prototype.render = function(){
-    var rad = 140;
+    var rad = 190;
     $(".small-circle").remove();
     var that = this;
     console.log(this.searchResults.length);
     for(var i = 0; i < this.searchResults.length; i++) {
         //This for just looping around in a circle (actually it works fine,
         // I just left the number of items in the final argument
-        var x = this.x + 80 + rad * Math.cos(2 * Math.PI * i / this.searchResults.length);
-        var y = this.y - 8 + rad * Math.sin(2 * Math.PI * i / this.searchResults.length);
+        var x = this.x + 120 + rad * Math.cos(2 * Math.PI * i / this.searchResults.length);
+        var y = this.y + rad * Math.sin(2 * Math.PI * i / this.searchResults.length);
         var searchNode = $.tmpl($("#tmpl-search-node").html(), {
             left: x,
             top: y,

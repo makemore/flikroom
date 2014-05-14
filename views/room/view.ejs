@@ -1,10 +1,10 @@
 <script type="text/x-handlebars-template" id="tmpl-search-box">
-    <input type="text" class="absolute" placeholder="search for video" style="left:${left}px; top:${top}px;"/>
+    <input type="text" class="absolute uberbox" placeholder="search for anything..." style="left:${left}px; top:${top}px;"/>
 </script>
 
 
 <script type="text/x-handlebars-template" id="tmpl-search-node">
-    <div class='small-circle' id="${id}" style="left:${left}px; top:${top}px;">${type}${numberOfResults}</div>
+    <div class='search-result-handle' id="${id}" style="left:${left}px; top:${top}px;">${numberOfResults}</div>
 </script>
 
 <script type="text/x-handlebars-template" id="tmpl-result-node-youtube">
@@ -25,6 +25,10 @@
 <div id="canvasContainer">
     <div id="canvas">
         <div class="node"></div>
+    </div>
+
+    <div id="apiContainer">
+        YouTube<input type="checkbox"/> Web Search <input type="checkbox"/>
     </div>
 
     <div id="chatContainer" ng-controller="ChatCtrl">

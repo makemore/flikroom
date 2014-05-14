@@ -1,0 +1,26 @@
+
+.search-result-handle{
+    position: absolute;
+    width:35px;
+    height:35px;
+    background-color: white;
+    border-radius: 50px;
+    text-align: center;
+}
+
+.uberbox{
+    border:none;
+    height:30px;
+    font-size:20px;
+}
+
+.node-youtube{
+    position: absolute;
+    background-color: white;
+}
+
+
+.node-bing{
+    position: absolute;
+    background-color: white;
+}
