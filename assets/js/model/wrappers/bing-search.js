@@ -8,7 +8,7 @@ var BingSearch = function(){
     this.type = "bing";
     this.results = [];
     this.id = "bingSearch";
-    this.mock = true;
+    this.mock = false;
 };
 
 

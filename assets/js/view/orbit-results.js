@@ -67,6 +67,8 @@ OrbitResults.prototype.render = function(){
             }
         });
 
+
+        /*
         $(searchNode).on("mouseout", function () {
             for (var i = 0; i < that.searchResults.length; i++) {
                 if (that.searchResults[i].id === $(this).attr("id")) {
@@ -74,11 +76,8 @@ OrbitResults.prototype.render = function(){
                 }
             }
         });
-
-
+        */
         $("#canvas").append(searchNode);
-        //console.log(this.searchResults[i].id);
-        //console.log(i);
     }
 
 
