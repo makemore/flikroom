@@ -14,13 +14,19 @@
     font-size:20px;
 }
 
-.node-youtube{
+.node-youtube-seach-result{
     position: absolute;
-    background-color: white;
+    background-repeat: no-repeat;
+    width:120px;
+    height:90px;
+    background-size: contain;
+    color:white;
 }
 
 
 .node-bing{
     position: absolute;
-    background-color: white;
+    width:120px;
+    height:90px;
+    background-color: #333;
 }

@@ -58,6 +58,7 @@ YouTubeSearch.prototype.search = function(term, callback){
                 var item = {}
                 item.title = youtubeData.items[i].snippet.title;
                 item.image = youtubeData.items[i].snippet.thumbnails.default.url;
+                item.id = youtubeData.items[i].id.videoId;
                 that.results.push(item);
             }
             callback(that);
@@ -74,5 +75,12 @@ YouTubeSearch.prototype.search = function(term, callback){
         }
         callback(that);
     }
+}
 
+YouTubeSearch.prototype.convertResultIntoNode = function(result, x, y){
+    console.log(result);
+    console.log(x);
+    console.log(y);
+    var player = new YouTubePlayer(x,y);
+    player.init(result.id);
 }

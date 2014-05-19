@@ -8,9 +8,8 @@
 </script>
 
 <script type="text/x-handlebars-template" id="tmpl-result-node-youtube">
-    <div class='node-youtube' style="left:${left}px; top:${top}px;">
+    <div class='node-youtube-seach-result' style="left:${left}px; top:${top}px; background-image:url(${image});">
         <div>${title}</div>
-        <div><img src="${image}"/></div>
     </div>
 </script>
 
@@ -50,4 +49,27 @@
 <script>
     var roomId = <%= room.id %>;
     var userId = <%= userId %>;
+</script>
+
+<script type="text/javascript">
+
+    var FizzyText = function() {
+        this.message = 'dat.gui';
+        this.speed = 0.8;
+        this.displayOutline = false;
+        this.explode = function() {
+
+        };
+        // Define render logic ...
+    };
+
+    window.onload = function() {
+        var text = new FizzyText();
+        var gui = new dat.GUI();
+        gui.add(text, 'message');
+        gui.add(text, 'speed', -5, 5);
+        gui.add(text, 'displayOutline');
+        gui.add(text, 'explode');
+    };
+
 </script>

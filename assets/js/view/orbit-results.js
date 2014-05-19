@@ -32,7 +32,6 @@ OrbitResults.prototype.render = function(){
     var rad = 190;
     $(".small-circle").remove();
     var that = this;
-    console.log(this.searchResults.length);
     for(var i = 0; i < this.searchResults.length; i++) {
         //This for just looping around in a circle (actually it works fine,
         // I just left the number of items in the final argument
@@ -45,27 +44,43 @@ OrbitResults.prototype.render = function(){
             id: this.searchResults[i].id,
             numberOfResults: this.searchResults[i].results.length
         });
-
+        this.searchResults[i].resultsShown = false;
         //Fucking stupid code, but it works, must do better property lookup search here
-        $(searchNode).on("mouseenter", function () {
+        $(searchNode).on("click", function () {
             for (var i = 0; i < that.searchResults.length; i++){
                 if (that.searchResults[i].id === $(this).attr("id"))
                 {
-                    //console.log(that.searchResults[i]);
-                    for (var j = 0; j < that.searchResults[i].results.length; j++) {
-                        var x = that.x + 80 + (rad + (rad + (j * 150))) * Math.cos(2 * Math.PI * i / that.searchResults.length);
-                        var y = that.y - 8 + (rad + (rad + (j * 150))) * Math.sin(2 * Math.PI * i / that.searchResults.length);
-                        var resultNode = $.tmpl($("#" + that.searchResults[i].template).html(), {
-                            left: x,
-                            top: y,
-                            title: that.searchResults[i].results[j].title,
-                            image: that.searchResults[i].results[j].image
-                        });
-                        $("#canvas").append(resultNode);
+                    var searchProvider = that.searchResults[i];
+                    if (!searchProvider.resultsShown) {
+                        //console.log(that.searchResults[i]);
+                        for (var j = 0; j < searchProvider.results.length; j++) {
+                            var result = searchProvider.results[j];
+                            var x = that.x + 80 + (rad + (rad + (j * 150))) * Math.cos(2 * Math.PI * i / that.searchResults.length);
+                            var y = that.y - 8 + (rad + (rad + (j * 150))) * Math.sin(2 * Math.PI * i / that.searchResults.length);
+                            var resultNode = $.tmpl($("#" + searchProvider.template).html(), {
+                                left: x,
+                                top: y,
+                                title: result.title,
+                                image: result.image
+                            });
+                            $("#canvas").append(resultNode);
+                            $(resultNode).draggable({
+                                stop: function(e,ui) {
+                                    searchProvider.convertResultIntoNode(result, ui.position.left, ui.position.top);
+                                }
+                            });
+                        }
+                        that.searchResults[i].resultsShown = !that.searchResults[i].resultsShown;
+                    }
+                    else {
+                        $(that.searchResults[i].cssClass).remove();
+                        that.searchResults[i].resultsShown = !that.searchResults[i].resultsShown;
                     }
                 }
             }
         });
+
+
 
 
         /*

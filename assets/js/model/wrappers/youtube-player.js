@@ -29,8 +29,7 @@
 
  */
 
-var YouTubePlayer = function(name, x, y){
-  this.name = name;
+var YouTubePlayer = function(x, y){
   this.x = x;
   this.y = y;
 };
@@ -45,7 +44,7 @@ YouTubePlayer.prototype.getName = function() {
 
 YouTubePlayer.prototype.init = function(id) {
     var rndNum = Math.floor((Math.random() * 10000) + 1);
-    var video = "<div id='player" + rndNum + "' class='node-youtube' style='left:" + this.x + "px;top:" + this.y + "px;'></div>";
+    var video = "<div id='player" + rndNum + "' class='node-youtube-player' style='left:" + this.x + "px;top:" + this.y + "px;'></div>";
     $("#canvas").append(video);
     //YouTubePlayer.prototype.player;
     //console.log(YT);
@@ -87,16 +86,18 @@ YouTubePlayer.prototype.init = function(id) {
     // 5. The API calls this function when the player's state changes.
     //    The function indicates that when playing a video (state=1),
     //    the player should play for six seconds and then stop.
+
     var done = false;
     function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.PLAYING && !done) {
+        /*if (event.data == YT.PlayerState.PLAYING && !done) {
             setTimeout(stopVideo, 6000);
             done = true;
-        }
+        }*/
     }
     function stopVideo() {
         player.stopVideo();
     }
+
 };
 
 
