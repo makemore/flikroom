@@ -67,6 +67,7 @@ OrbitResults.prototype.render = function(){
                             $(resultNode).draggable({
                                 stop: function(e,ui) {
                                     searchProvider.convertResultIntoNode(result, ui.position.left, ui.position.top);
+                                    $(this).remove();
                                 }
                             });
                         }

@@ -1,3 +1,11 @@
 .node-youtube-player{
     position: absolute;
 }
+
+.node-web-page{
+    position: absolute;
+    width:120px;
+    height:80px;
+    background-color: white;
+    color:black;
+}

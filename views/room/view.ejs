@@ -2,6 +2,9 @@
     <input type="text" class="absolute uberbox" placeholder="search for anything..." style="left:${left}px; top:${top}px;"/>
 </script>
 
+<script type="text/x-handlebars-template" id="tmpl-web-page">
+    <div class='node-web-page' style="left:${left}px; top:${top}px;" data-url="${url}">${title}</div>
+</script>
 
 <script type="text/x-handlebars-template" id="tmpl-search-node">
     <div class='search-result-handle' id="${id}" style="left:${left}px; top:${top}px;">${numberOfResults}</div>
@@ -14,7 +17,7 @@
 </script>
 
 <script type="text/x-handlebars-template" id="tmpl-result-node-bing">
-    <div class='absolute node-bing' style="left:${left}px; top:${top}px;">${title}</div>
+    <div class='absolute node-bing-search-result' style="left:${left}px; top:${top}px;">${title}</div>
 </script>
 
 <script id="searchCallback" type="text/javascript" src="">
