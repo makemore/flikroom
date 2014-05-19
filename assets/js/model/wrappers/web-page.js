@@ -46,6 +46,12 @@ var WebPage = function(x, y, result){
     $(webPageNode).on("click", function(){
         console.log($(this).data("url"));
     });
+    $(webPageNode).draggable();
+    $(webPageNode).resizable({
+        handles: 'se'
+        //aspectRatio: 2 / 1
+    });
+
 };
 
 WebPage.prototype.init = function(id) {
