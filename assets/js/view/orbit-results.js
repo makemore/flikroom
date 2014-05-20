@@ -54,6 +54,7 @@ OrbitResults.prototype.render = function(){
                     if (!searchProvider.resultsShown) {
                         //console.log(that.searchResults[i]);
                         for (var j = 0; j < searchProvider.results.length; j++) {
+
                             var result = searchProvider.results[j];
                             var x = that.x + 80 + (rad + (rad + (j * 150))) * Math.cos(2 * Math.PI * i / that.searchResults.length);
                             var y = that.y - 8 + (rad + (rad + (j * 150))) * Math.sin(2 * Math.PI * i / that.searchResults.length);
@@ -61,12 +62,16 @@ OrbitResults.prototype.render = function(){
                                 left: x,
                                 top: y,
                                 title: result.title,
-                                image: result.image
+                                image: result.image,
+                                id: result.id
                             });
+                            console.log("here");
                             $("#canvas").append(resultNode);
                             $(resultNode).draggable({
                                 stop: function(e,ui) {
-                                    searchProvider.convertResultIntoNode(result, ui.position.left, ui.position.top);
+                                    var that = this;
+                                    var result = $.grep(searchProvider.results, function(e){ return e.id == $(that).data("id"); });
+                                    searchProvider.convertResultIntoNode(result[0], ui.position.left, ui.position.top);
                                     $(this).remove();
                                 }
                             });

@@ -104,7 +104,7 @@ module.exports = {
 
             } else
             {
-                console.log(response.statusCode);
+                console.log(response);
                 console.log(error);
             }
         });

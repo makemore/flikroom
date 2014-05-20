@@ -25,6 +25,8 @@ BingSearch.prototype.search = function(term, callback)
                 item.title = results.SearchResponse.Web.Results[i].Title;
                 item.url = results.SearchResponse.Web.Results[i].Url;
                 item.description = results.SearchResponse.Web.Results[i].Description;
+                item.id = item.url; //There isn't an id per result, so just use the full url
+
                 //item.image = results.searchResponse.Web.Results[i].snippet.thumbnails.default.url;
 
                 /*

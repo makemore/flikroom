@@ -52,7 +52,15 @@ YouTubePlayer.prototype.init = function(result) {
         title: result.title
     });
     $("#canvas").append(youtubePlayer);
+
     youtubePlayer = $(youtubePlayer);
+
+
+    //This should be refactored into a base "node" class
+    youtubePlayer.find(".node-close").on("click", function(){
+        $(youtubePlayer).remove();
+    });
+
     youtubePlayer.draggable();
 
     //YouTubePlayer.prototype.player;

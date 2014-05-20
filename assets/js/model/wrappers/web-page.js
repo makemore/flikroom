@@ -45,6 +45,11 @@ var WebPage = function(x, y, result){
     });
     webPageNode = $(webPageNode);
     $("#canvas").append(webPageNode);
+
+    webPageNode.find(".node-close").on("click", function(){
+        $(webPageNode).remove();
+    });
+
     webPageNode.on("click", function(){
         console.log($(this).data("url"));
     });

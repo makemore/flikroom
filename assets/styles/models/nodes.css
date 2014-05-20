@@ -4,11 +4,13 @@
 
 .node-web-page{
     position: absolute;
-    width:120px;
-    height:80px;
+    width:340px;
+    height:290px;
     background-color: white;
     color:black;
 }
+
+
 
 .node-menu{
     background-color: #333;
@@ -16,6 +18,16 @@
     white-space: nowrap;
     overflow:hidden;
     width:100%;
+    height:20px;
+}
+
+.node-close{
+    float:right;
+    cursor:pointer;
+}
+
+.node-body{
+    margin-bottom: 14px;
 }
 
 .node-footer{
@@ -25,5 +37,7 @@
     overflow:hidden;
     position: absolute;
     bottom:0px;
+    height:20px;
+    margin-top:20px;
     width:100%;
 }
