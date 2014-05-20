@@ -12,4 +12,18 @@
 
 .node-menu{
     background-color: #333;
+    color:#eee;
+    white-space: nowrap;
+    overflow:hidden;
+    width:100%;
+}
+
+.node-footer{
+    background-color: #333;
+    color:#eee;
+    white-space: nowrap;
+    overflow:hidden;
+    position: absolute;
+    bottom:0px;
+    width:100%;
 }

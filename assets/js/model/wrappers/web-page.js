@@ -40,17 +40,25 @@ var WebPage = function(x, y, result){
         left: x,
         top: y,
         title: result.title,
-        url: result.url
+        url: result.url,
+        description: result.description
     });
+    webPageNode = $(webPageNode);
     $("#canvas").append(webPageNode);
-    $(webPageNode).on("click", function(){
+    webPageNode.on("click", function(){
         console.log($(this).data("url"));
     });
-    $(webPageNode).draggable();
-    $(webPageNode).resizable({
-        handles: 'se'
+    webPageNode.draggable();
+    webPageNode.resizable({
+        handles: 'se',
         //aspectRatio: 2 / 1
+        stop: function(event, ui){
+            webPageNode.find("iframe").width(webPageNode.width());
+            webPageNode.find("iframe").height(webPageNode.height());
+        }
     });
+    webPageNode.find("iframe").width(webPageNode.width());
+    webPageNode.find("iframe").height(webPageNode.height());
 
 };
 

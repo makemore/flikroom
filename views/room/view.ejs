@@ -4,8 +4,19 @@
 
 <script type="text/x-handlebars-template" id="tmpl-web-page">
     <div class='node-web-page' style="left:${left}px; top:${top}px;" data-url="${url}">
-        <div class="node-menu">Menu</div>
-        <div>${title}</div>
+        <div class="node-menu">${title}</div>
+        <div class="node-body">${description}</div>
+        <!--<iframe src="${url}"></iframe>-->
+        <div class="node-footer">Footer</div>
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" id="tmpl-youtube-player">
+    <div class='node-youtube-player' style="left:${left}px; top:${top}px;">
+        <div class="node-menu">${title}</div>
+        <div class="node-body" id='youtube-player${rndNum}'>${title}</div>
+        <!--<iframe src="${url}"></iframe>-->
+        <div class="node-footer">Footer</div>
     </div>
 </script>
 

@@ -29,9 +29,10 @@
 
  */
 
-var YouTubePlayer = function(x, y){
+var YouTubePlayer = function(x, y, result){
   this.x = x;
   this.y = y;
+  this.init(result);
 };
 
 //Add dynamically to the already defined object a new getter
@@ -42,10 +43,18 @@ YouTubePlayer.prototype.getName = function() {
 
 
 
-YouTubePlayer.prototype.init = function(id) {
+YouTubePlayer.prototype.init = function(result) {
     var rndNum = Math.floor((Math.random() * 10000) + 1);
-    var video = "<div id='player" + rndNum + "' class='node-youtube-player' style='left:" + this.x + "px;top:" + this.y + "px;'></div>";
-    $("#canvas").append(video);
+    var youtubePlayer = $.tmpl($("#tmpl-youtube-player").html(), {
+        left: this.x,
+        top: this.y,
+        rndNum: rndNum,
+        title: result.title
+    });
+    $("#canvas").append(youtubePlayer);
+    youtubePlayer = $(youtubePlayer);
+    youtubePlayer.draggable();
+
     //YouTubePlayer.prototype.player;
     //console.log(YT);
     if (window.YT === undefined) {
@@ -67,10 +76,10 @@ YouTubePlayer.prototype.init = function(id) {
 
 
     function addPlayer(rndNum){
-        YouTubePlayer.prototype.player = new YT.Player('player' + rndNum, {
+        YouTubePlayer.prototype.player = new YT.Player('youtube-player' + rndNum, {
             height: '290',
             width: '340',
-            videoId: id,
+            videoId: result.id,
             events: {
                 'onReady': onPlayerReady,
                 'onStateChange': onPlayerStateChange

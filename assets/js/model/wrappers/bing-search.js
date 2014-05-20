@@ -24,6 +24,7 @@ BingSearch.prototype.search = function(term, callback)
                 var item = {}
                 item.title = results.SearchResponse.Web.Results[i].Title;
                 item.url = results.SearchResponse.Web.Results[i].Url;
+                item.description = results.SearchResponse.Web.Results[i].Description;
                 //item.image = results.searchResponse.Web.Results[i].snippet.thumbnails.default.url;
 
                 /*
