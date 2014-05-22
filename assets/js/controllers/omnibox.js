@@ -17,8 +17,9 @@ OmniBox.prototype.init = function(){
 
     inputField.focus();
     this.numberOfResults = 0;
-    var that = this;
-    var orbiter = new OrbitResults(this.x, this.y);
+    var halfSizeOfField = $(inputField).width()/2;
+    console.log(halfSizeOfField);
+    var orbiter = new OrbitResults(this.x + halfSizeOfField, this.y);
 
         inputField.keypress(function(event) {
         if (event.keyCode == 13) {

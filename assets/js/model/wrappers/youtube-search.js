@@ -50,7 +50,8 @@ YouTubeSearch.prototype.search = function(term, callback){
     if (!this.mock) {
         var request = gapi.client.youtube.search.list({
             q: term,
-            part: 'snippet'
+            part: 'snippet',
+            maxResults: 10
         });
 
         request.execute(function (youtubeData) {
