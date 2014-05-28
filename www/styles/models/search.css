@@ -1,0 +1,66 @@
+
+.search-result-handle{
+    position: absolute;
+    width:35px;
+    height:35px;
+    background-color: white;
+    border-radius: 50px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.uberbox{
+    border:none;
+    height:35px;
+    font-size:20px;
+    width:150px;
+    top: -11px;
+    position: relative;
+    left: -4px;
+}
+
+.filter-container{
+    display: inline-block;
+    width:35px;
+    height:35px;
+    background-color: red;
+}
+
+.filter-dropdown
+{
+    position: relative;
+    top:100px;
+    width:100px;
+    height:200px;
+    background-color: white;
+    display: none;
+}
+
+.filter-icon{
+    background-image:url('/assets/images/filter-page.png');
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+    background-position:center;
+    width: 20px;
+    height: 20px;
+}
+
+
+.node-youtube-search-result {
+    position: absolute;
+    background-repeat: no-repeat;
+    width:120px;
+    height:90px;
+    background-size: contain;
+    color:white;
+}
+
+
+.node-bing-search-result{
+    position: absolute;
+    width:120px;
+    height:90px;
+    background-color: #333;
+    color:#eee;
+}
+

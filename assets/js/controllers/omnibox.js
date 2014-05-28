@@ -10,16 +10,23 @@ var OmniBox = function(name,x,y){
 };
 
 OmniBox.prototype.init = function(){
-    var inputField = $.tmpl($("#tmpl-search-box").html(), { left: this.x, top: this.y});
-    inputField = $(inputField);
-    $("#canvas").append(inputField);
-    var youtubeSearch = new YouTubeSearch("YouTubeSearch");
+    var inputBox = $.tmpl($("#tmpl-search-box").html(), { left: this.x, top: this.y});
+    inputBox = $(inputBox);
+    $("#canvas").append(inputBox);
 
+    inputBox.find(".filter-container").on("click",function(){
+        inputBox.find(".filter-dropdown").toggle();
+    });
+
+    var inputField = inputBox.find(".uberbox");
+    var youtubeSearch = new YouTubeSearch("YouTubeSearch");
     inputField.focus();
     this.numberOfResults = 0;
     var halfSizeOfField = $(inputField).width()/2;
     console.log(halfSizeOfField);
     var orbiter = new OrbitResults(this.x + halfSizeOfField, this.y);
+
+
 
         inputField.keypress(function(event) {
         if (event.keyCode == 13) {
