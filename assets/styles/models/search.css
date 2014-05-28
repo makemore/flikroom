@@ -44,7 +44,7 @@
 
 .filter-icon
 {
-    background-image:url('/images/filter-page.png');
+    background-image:url('/images/filter-everything.png');
     background-repeat:no-repeat;
     background-position:center;
     width: 20px;
@@ -83,6 +83,10 @@
 }
 .filter-option-video{
     background-image:url('/images/filter-video.png');
+}
+
+.filter-option-everything{
+    background-image:url('/images/filter-everything.png');
 }
 
 
