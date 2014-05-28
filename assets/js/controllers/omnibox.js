@@ -24,8 +24,9 @@ OmniBox.prototype.init = function(){
     this.numberOfResults = 0;
     var halfSizeOfField = $(inputField).width()/2;
     console.log(halfSizeOfField);
-    var orbiter = new OrbitResults(this.x + halfSizeOfField, this.y);
+    var orbiter = new OrbitFilterResults(this.x + halfSizeOfField, this.y);
 
+    var justResults = new OrbitResults(this.x + halfSizeOfField, this.y);
 
 
         inputField.keypress(function(event) {
@@ -43,14 +44,15 @@ OmniBox.prototype.init = function(){
                 var bingSearch = new BingSearch();
 
                 bingSearch.search($(this).val(), function(response){
-                    orbiter.addResultSet(response);
+                    //orbiter.addResultSet(response);
                 });
 
                 //this line adds the type of result to the page, before waiting to fill it up with results
                 //orbiter.addResultSet({ type: "youtube", results:[]});
 
                 youtubeSearch.search($(this).val(), function(response){
-                    orbiter.addResultSet(response);
+                    //orbiter.addResultSet(response);
+                    justResults.addResults(response);
                 });
 
                 //orbiter.addResultSet(searchResult);
