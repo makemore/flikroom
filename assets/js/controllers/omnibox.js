@@ -59,6 +59,7 @@ OmniBox.prototype.search = function(val, type){
     }
 }
 
+
 OmniBox.prototype.init = function(){
     var inputBox = $.tmpl($("#tmpl-search-box").html(), { left: this.x, top: this.y});
     inputBox = $(inputBox);

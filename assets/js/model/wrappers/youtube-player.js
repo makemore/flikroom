@@ -169,6 +169,8 @@ YouTubePlayer.prototype.init = function(result) {
         var width = null;
         var height = null;
 
+        var topLeftToBottomRight = true;
+
         if (startLeft > stopLeft) {
             finalLeft = stopLeft;
             width = startLeft - stopLeft;
@@ -185,6 +187,20 @@ YouTubePlayer.prototype.init = function(result) {
             height = startTop - stopTop;
         }
 
+        if (startLeft > stopLeft && startTop < stopTop)
+        {
+            // bottom left direction
+            topLeftToBottomRight = false;
+        }
+
+        if (startLeft < stopLeft && startTop > stopTop)
+        {
+            topLeftToBottomRight = false;
+        }
+
+
+
+
         console.log(finalLeft);
         console.log(finalTop);
 
@@ -200,21 +216,40 @@ YouTubePlayer.prototype.init = function(result) {
                eX,eY
            */
 
-        var center = $.tmpl($("#tmpl-node-path").html(), {
-            left: finalLeft,
-            top: finalTop,
-            width: width,
-            height: height,
-            sX : 0,
-            sY : 0,
-            c1X : 0,
-            c1Y : 0,
-            c2X : 0,
-            c2Y : 0,
-            eX : width,
-            eY : height
-        });
+        var center;
 
+        if (topLeftToBottomRight)
+        {
+            center = $.tmpl($("#tmpl-node-path").html(), {
+                left: finalLeft,
+                top: finalTop,
+                width: width,
+                height: height,
+                sX : 0,
+                sY : 0,
+                c1X : width / 2,
+                c1Y : 0,
+                c2X : width / 2,
+                c2Y : height,
+                eX : width,
+                eY : height
+            });
+        } else {
+            center = $.tmpl($("#tmpl-node-path").html(), {
+                left: finalLeft,
+                top: finalTop,
+                width: width,
+                height: height,
+                sX : 0,
+                sY : height,
+                c1X : width / 2,
+                c1Y : height,
+                c2X : width / 2,
+                c2Y : 0,
+                eX : width,
+                eY : 0
+            });
+        }
         center = $(center);
 
         $("#canvas").append(center);
