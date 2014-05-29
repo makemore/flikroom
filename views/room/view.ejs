@@ -1,17 +1,18 @@
 <script type="text/x-handlebars-template" id="tmpl-search-box">
     <div class="absolute" style="left:${left}px; top:${top}px;">
         <div class="filter-container">
-            <div class="filter-icon"></div>
+            <div class="filter-icon filter-option-video" data-type="video"></div>
             <div class="filter-dropdown-icon"></div>
         </div>
         <input type="text" style="display:inline-block" class="uberbox" placeholder="search..."/>
+        <div class="close-omni"></div>
         <div class="filter-dropdown-handle">
             <div class="filter-dropdown">
-                <div class="filter-option filter-option-everything">Everything</div>
-                <div class="filter-option filter-option-image">Images</div>
-                <div class="filter-option filter-option-video">Videos</div>
-                <div class="filter-option filter-option-sound">Sounds</div>
-                <div class="filter-option filter-option-page">Web Pages</div>
+                <div class="filter-option filter-option-everything" data-type="everything">Everything</div>
+                <div class="filter-option filter-option-image" data-type="images">Images</div>
+                <div class="filter-option filter-option-video" data-type="video">Videos</div>
+                <div class="filter-option filter-option-sound" data-type="sound">Sounds</div>
+                <div class="filter-option filter-option-page" data-type="page">Web Pages</div>
             </div>
         </div>
     </div>
@@ -19,6 +20,19 @@
 
 <script type="text/x-handlebars-template" id="tmpl-search-node">
     <div class='search-result-handle' id="${id}" style="left:${left}px; top:${top}px;">${numberOfResults}</div>
+</script>
+
+<script type="text/x-handlebars-template" id="tmpl-node-path">
+    <div class='node-path-container' style="left:${left}px; top:${top}px;width:${width}px;height:${height}px;">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             xmlns:xlink="http://www.w3.org/1999/xlink">
+            <path d="M${sX},${sY}
+                    C${c1X},${c1Y}
+                    ${c2X},${c2Y}
+                    ${eX},${eY}"
+                  style="stroke:#000; stroke-width:3px; fill:none;"/>
+        </svg>
+    </div>
 </script>
 
 <script type="text/x-handlebars-template" id="tmpl-result-node-youtube">
@@ -45,7 +59,10 @@
         <div class="node-menu">${title}<div class="node-close">X</div></div>
         <div class="node-body" id='youtube-player${rndNum}'>${title}</div>
         <!--<iframe src="${url}"></iframe>-->
-        <div class="node-footer">Footer</div>
+        <div class="node-footer">
+            <div class="node-handle handle-input"></div>
+            <div class="node-handle handle-output"></div>
+        </div>
     </div>
 </script>
 
@@ -53,10 +70,6 @@
 <div id="canvasContainer">
     <div id="canvas">
         <div class="node"></div>
-    </div>
-
-    <div id="apiContainer">
-        YouTube<input type="checkbox"/> Web Search <input type="checkbox"/>
     </div>
 
     <div id="chatContainer" ng-controller="ChatCtrl">

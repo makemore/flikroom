@@ -7,7 +7,57 @@ var OmniBox = function(name,x,y){
     this.x = x;
     this.y = y;
     this.init();
+    this.bingSearchResults = null;
+    this.youtubeSearchResults = null;
+    this.justResults;
 };
+
+OmniBox.prototype.search = function(val, type){
+    var that = this;
+    var link = URI(val);
+
+    if (link.is("absolute"))
+    {
+        console.log("absolute");
+    }
+    else if (link.is("relative"))
+    {
+
+        switch(type) {
+            case "page":
+                var bingSearch = new BingSearch();
+                bingSearch.search(val, function(response){
+                    //orbiter.addResultSet(response);
+                    //that.bingSearchResults = response;
+                    that.justResults.addResults(response);
+                });
+                break;
+            case "video":
+                var youtubeSearch = new YouTubeSearch("youtube");
+                youtubeSearch.search(val, function(response){
+                    //orbiter.addResultSet(response);
+                    that.justResults.addResults(response);
+                    //that.youtubeSearchResults = response;
+                });
+                break;
+            default:
+                alert("not sure")
+                break;
+        }
+    }
+    else if (link.is("urn"))
+    {
+        console.log("urn");
+    }
+    else if (link.is("url"))
+    {
+        console.log("url");
+    }
+    else
+    {
+        console.log(link);
+    }
+}
 
 OmniBox.prototype.init = function(){
     var inputBox = $.tmpl($("#tmpl-search-box").html(), { left: this.x, top: this.y});
@@ -18,73 +68,32 @@ OmniBox.prototype.init = function(){
         inputBox.find(".filter-dropdown").toggle();
     });
 
+    inputBox.find(".close-omni").on("click",function(){
+        inputBox.remove();
+        $(".search-result").remove();
+    });
+
     var inputField = inputBox.find(".uberbox");
     var youtubeSearch = new YouTubeSearch("YouTubeSearch");
     inputField.focus();
     this.numberOfResults = 0;
-    var halfSizeOfField = $(inputField).width()/2;
+    var halfSizeOfField = $(inputBox).width()/2;
     console.log(halfSizeOfField);
     var orbiter = new OrbitFilterResults(this.x + halfSizeOfField, this.y);
+    this.justResults = new OrbitResults(this.x + halfSizeOfField, this.y);
 
-    var justResults = new OrbitResults(this.x + halfSizeOfField, this.y);
+    var that = this;
 
-
-        inputField.keypress(function(event) {
+    $(".filter-option").on("click", inputBox , function(){
+        inputBox.find(".filter-dropdown").toggle();
+        that.search(inputField.val(), $(this).data("type"));
+    });
+    inputField.keypress(function(event) {
         if (event.keyCode == 13) {
-
-            var link = URI($(this).val());
-
-            if (link.is("absolute"))
-            {
-                console.log("absolute");
-            }
-            else if (link.is("relative"))
-            {
-                var youtubeSearch = new YouTubeSearch("youtube");
-                var bingSearch = new BingSearch();
-
-                bingSearch.search($(this).val(), function(response){
-                    //orbiter.addResultSet(response);
-                });
-
-                //this line adds the type of result to the page, before waiting to fill it up with results
-                //orbiter.addResultSet({ type: "youtube", results:[]});
-
-                youtubeSearch.search($(this).val(), function(response){
-                    //orbiter.addResultSet(response);
-                    justResults.addResults(response);
-                });
-
-                //orbiter.addResultSet(searchResult);
-                console.log("relative");
-            }
-            else if (link.is("urn"))
-            {
-                console.log("urn");
-            }
-            else if (link.is("url"))
-            {
-                console.log("url");
-            }
-            else
-            {
-                console.log(link);
-            }
-
-            /*
-            console.log("here");
-            io.socket.request("/scrape/getLinksFromUrl", { url : $(this).val() }, function(links){
-                console.log(links);
-            });
-            */
-
-            //  youtube.init();
-            //  $(this).remove();
+            var filterSelection = $(inputBox).find(".filter-icon");
+            that.search($(this).val(), filterSelection.data("type"));
         } else {
-            // var val = $(this).val();
-            // if (val.length > 1) {
-            //     youtubeSearch.search($(this).val());
-            // }
+            //just typing into the box
         }
     });
 

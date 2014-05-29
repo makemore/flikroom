@@ -1,5 +1,6 @@
 .node-youtube-player{
     position: absolute;
+    z-index:100;
 }
 
 .node-web-page{
@@ -8,9 +9,8 @@
     height:290px;
     background-color: white;
     color:black;
+    z-index:100;
 }
-
-
 
 .node-menu{
     background-color: #333;
@@ -40,4 +40,24 @@
     height:20px;
     margin-top:20px;
     width:100%;
+}
+
+.node-handle{
+    background-image:url('/images/handle-dot.png');
+    background-repeat:no-repeat;
+    background-position:center;
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.node-path-container{
+    background-color: white;
+    z-index:50;
+    position: absolute;
+}
+
+.handle-output{
+    float:right;
 }

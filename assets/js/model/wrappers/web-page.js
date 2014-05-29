@@ -53,7 +53,9 @@ var WebPage = function(x, y, result){
     webPageNode.on("click", function(){
         console.log($(this).data("url"));
     });
-    webPageNode.draggable();
+
+    webPageNode.draggable({ handle: ".node-menu" });
+
     webPageNode.resizable({
         handles: 'se',
         //aspectRatio: 2 / 1
