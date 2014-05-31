@@ -82,5 +82,5 @@ YouTubeSearch.prototype.convertResultIntoNode = function(result, x, y){
     console.log(result);
     console.log(x);
     console.log(y);
-    var player = new YouTubePlayer(x,y, result);
+    var player = getYouTubePlayer(x,y, result);
 }
