@@ -61,7 +61,7 @@ $(document).ready(function(){
     io.socket.request("/node?room=" + roomId, null, function(nodes){
         for (var i = 0; i < nodes.length; i++)
         {
-            addNodeToCanvas(nodes[i].id, nodes[i].x, nodes[i].y);
+            //addNodeToCanvas(nodes[i].id, nodes[i].x, nodes[i].y);
         }
     });
 

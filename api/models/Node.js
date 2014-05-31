@@ -15,6 +15,12 @@ module.exports = {
       },
       user:{
           model: 'user'
+      },
+      inNodes: {
+          type: 'array'
+      },
+      outNodes: {
+          type: 'array'
       }
   }
 };

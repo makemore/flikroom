@@ -35,10 +35,7 @@ var YouTubePlayer = function(x, y, result){
   this.init(result);
 };
 
-//Add dynamically to the already defined object a new getter
-YouTubePlayer.prototype.getName = function() {
-    return this.name;
-};
+
 
 
 
@@ -143,17 +140,26 @@ YouTubePlayer.prototype.init = function(result) {
         $("#canvas").append("<svg height='210' width='400' style='position:absolute;left:" + player.css("left") + ";top:" + player.css("top") + ";z-index:1000;'><path d='M85,65 C339,66 170,369 406,372 Z' /></svg>");
         */
         console.log("down");
+
         var player = $(e.currentTarget).parent().parent();
 
         startLeft = player.css("left").split("px")[0];
         startTop = player.css("top").split("px")[0];
-
         startLeft = parseInt(startLeft);
         startTop = parseInt(startTop) + player.height();
+
+        if ($(e.currentTarget).hasClass("handle-output"))
+        {
+            startLeft = startLeft + player.width();
+        }
 
         //dropTempMarker(startLeft,startTop, "s");
     });
 
+
+    //original test method for binding onto background canvas
+
+    /*
     $(window).mouseup(function(e){
 
         //need to work out top left position
@@ -161,6 +167,68 @@ YouTubePlayer.prototype.init = function(result) {
 
         var stopLeft = e.offsetX;
         var stopTop = e.offsetY;
+
+        var finalLeft = null;
+        var finalTop = null;
+
+        var width = null;
+        var height = null;
+
+        var topLeftToBottomRight = true;
+
+        if (startLeft > stopLeft) {
+            finalLeft = stopLeft;
+            width = startLeft - stopLeft;
+        } else {
+            finalLeft = startLeft;
+            width = stopLeft - startLeft;
+        }
+
+        if (startTop < stopTop) {
+            finalTop = startTop;
+            height = stopTop - startTop;
+        } else {
+            finalTop = stopTop;
+            height = startTop - stopTop;
+        }
+
+        if (startLeft > stopLeft && startTop < stopTop)
+        {
+            // bottom left direction
+            topLeftToBottomRight = false;
+        }
+
+        if (startLeft < stopLeft && startTop > stopTop)
+        {
+            topLeftToBottomRight = false;
+        }
+
+
+        var nodeLink = new NodeLink(finalLeft,finalTop,width,height, topLeftToBottomRight);
+
+    });
+    */
+
+    $(".node-handle").mouseup(function(e){
+
+        //need to work out top left position
+        //then just extend width and height of div based on bottom right
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        var player = $(e.currentTarget).parent().parent();
+
+        var stopLeft = player.css("left").split("px")[0];
+        var stopTop = player.css("top").split("px")[0];
+
+        stopLeft = parseInt(stopLeft);
+        stopTop = parseInt(stopTop) + player.height();
+
+        if ($(e.currentTarget).hasClass("handle-output"))
+        {
+            stopLeft = stopLeft + player.width();
+        }
 
 
         var finalLeft = null;
@@ -199,74 +267,8 @@ YouTubePlayer.prototype.init = function(result) {
         }
 
 
+        var nodeLink = new NodeLink(finalLeft,finalTop,width,height, topLeftToBottomRight);
 
-
-        console.log(finalLeft);
-        console.log(finalTop);
-
-        /*
-               start point startX
-               control point 1
-               control point 2
-               end
-
-               sX,sY,
-               c1X,c1Y,
-               c2X,c2Y,
-               eX,eY
-           */
-
-        var center;
-
-        if (topLeftToBottomRight)
-        {
-            center = $.tmpl($("#tmpl-node-path").html(), {
-                left: finalLeft,
-                top: finalTop,
-                width: width,
-                height: height,
-                sX : 0,
-                sY : 0,
-                c1X : width / 2,
-                c1Y : 0,
-                c2X : width / 2,
-                c2Y : height,
-                eX : width,
-                eY : height
-            });
-        } else {
-            center = $.tmpl($("#tmpl-node-path").html(), {
-                left: finalLeft,
-                top: finalTop,
-                width: width,
-                height: height,
-                sX : 0,
-                sY : height,
-                c1X : width / 2,
-                c1Y : height,
-                c2X : width / 2,
-                c2Y : 0,
-                eX : width,
-                eY : 0
-            });
-        }
-        center = $(center);
-
-        $("#canvas").append(center);
-
-        center = center[0];
-
-        //dropTempMarker(e.offsetX, e.offsetY, "e"); //end point
-        //dropTempMarker(finalLeft,finalTop, "f");  //final top left point
-        /*
-        var wasDragging = isDragging;
-        isDragging = false;
-        $(window).unbind("mousemove");
-        if (!wasDragging) { //was clicking
-            //$("#throbble").show();
-            console.log("dragged");
-        }
-        */
     });
 
 };
