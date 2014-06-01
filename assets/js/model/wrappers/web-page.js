@@ -33,42 +33,46 @@
 
  */
 
-var WebPage = function(x, y, result){
-    this.x = x;
-    this.y = y;
-    var webPageNode = $.tmpl($("#tmpl-web-page").html(), {
-        left: x,
-        top: y,
-        title: result.title,
-        url: result.url,
+
+var getWebPage = function(x, y, result) {
+
+    var webPage = {}
+    webPage.x = x;
+    webPage.y = y;
+
+    var webPageHtml = $.tmpl($("#tmpl-web-page").html(), {
         description: result.description
     });
-    webPageNode = $(webPageNode);
-    $("#canvas").append(webPageNode);
 
-    webPageNode.find(".node-close").on("click", function(){
-        $(webPageNode).remove();
+    var html = $.tmpl($("#tmpl-node-base").html(), {
+        title: result.title,
+        left: x,
+        top: y,
+        body: $(webPageHtml[0]).html(),
+        className: "node-web-page"
     });
 
-    webPageNode.on("click", function(){
+    $("#canvas").append(html);
+
+    webPage.$el = $(html);
+
+    webPage.$el.on("click", function(){
         console.log($(this).data("url"));
     });
 
-    webPageNode.draggable({ handle: ".node-menu" });
 
-    webPageNode.resizable({
+    webPage.$el.resizable({
         handles: 'se',
         //aspectRatio: 2 / 1
         stop: function(event, ui){
-            webPageNode.find("iframe").width(webPageNode.width());
-            webPageNode.find("iframe").height(webPageNode.height());
+            webPage.$el.find("iframe").width(webPage.$el.width());
+            webPage.$el.find("iframe").height(webPage.$el.height());
         }
     });
-    webPageNode.find("iframe").width(webPageNode.width());
-    webPageNode.find("iframe").height(webPageNode.height());
+    webPage.$el.find("iframe").width(webPage.$el.width());
+    webPage.$el.find("iframe").height(webPage.$el.height());
 
-};
+    var webPage = Object.create(new NodeBase(webPage));
+    return webPage;
+}
 
-WebPage.prototype.init = function(id) {
-
-};

@@ -56,5 +56,5 @@ BingSearch.prototype.search = function(term, callback)
 
 
 BingSearch.prototype.convertResultIntoNode = function(result, x, y){
-    var webPage = new WebPage(x,y, result);
+    var webPage = new getWebPage(x,y, result);
 }
