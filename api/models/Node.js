@@ -21,6 +21,12 @@ module.exports = {
       },
       outNodes: {
           type: 'array'
+      },
+      type: {
+          type: "string"
+      },
+      result: {
+          type: "json"
       }
   }
 };

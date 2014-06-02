@@ -1,23 +1,59 @@
-var NodeBase = function(node){
+var NodeBase = function(node, type){
     this.node = node;
+    this.type = type;
     this.setupBase();
     this.setupLinking();
+    this.inNodes = [];
+    this.outNodes = [];
+    this.links = [];
+    this.id = null;
 }
 
 NodeBase.prototype.setupBase = function(){
     var that = this;
-    this.node.$el.find(".node-close").on("click", function(){
-        $(that.node.$el[0]).remove();
+
+    $(".node-close").on("click", that.node.$el, function(e){
+       that.node.$el.remove();
+       that.delete();
     });
-    this.node.$el.draggable({ handle: ".node-menu" });
+
+    that.node.$el.draggable({ handle: ".node-menu" });
+}
 
 
+
+NodeBase.prototype.save = function(){
+    //io.socket.put("/node/" + id, { x: $(this).css("left"), y: $(this).css("top")}, function(response)
+    var that = this;
+    io.socket.post("/node/", {
+        x: that.node.x,
+        y: that.node.y,
+        room: roomId,
+        type: that.type,
+        result: that.node.result
+    }, function(response)
+    {
+        console.log(response);
+        this.id = response.id;
+    });
+}
+
+NodeBase.prototype.delete = function(){
+    var that = this;
+    io.socket.delete("/node/" + this.id, {
+
+        },
+        function(response)
+        {
+            console.log(response);
+        });
 }
 
 NodeBase.prototype.setupLinking = function(){
     var isDragging = false;
     var startLeft = 0;
     var startTop = 0;
+
 
     $(".node-handle").on("mousedown", this.node.$el, function(e){
         //alert("here");
@@ -64,6 +100,8 @@ NodeBase.prototype.setupLinking = function(){
 
         e.preventDefault();
         e.stopPropagation();
+
+
 
         var player = $(e.currentTarget).parent().parent();
 

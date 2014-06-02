@@ -37,6 +37,7 @@ var getYouTubePlayer = function(x, y, result){
 
     youtubePlayer.x = x;
     youtubePlayer.y = y;
+    youtubePlayer.result = result;
     // Give the baby away
 
     youtubePlayer.init = function(result) {
@@ -46,26 +47,26 @@ var getYouTubePlayer = function(x, y, result){
             rndNum: rndNum
         });
 
-        console.log(youtubeHtml[0]);
+        var source   = $("#tmpl-node-base").html();
+        var template = Handlebars.compile(source);
 
-        testing = youtubeHtml;
 
-        var html = $.tmpl($("#tmpl-node-base").html(), {
-            title: result.title,
+
+        var context = {
+            title: youtubePlayer.result.title,
             left: this.x,
             top: this.y,
-            //body: youtubeHtml[0],
-            body: "hello",
+            body: youtubeHtml[0].outerHTML,
             className: "node-youtube-player"
-        });
+        };
 
-
+        var html = $(template(context)); //have to wrap in jquery before appending to keep reference;
 
         $("#canvas").append(html);
 
 
         //This isn't getting back to the base class
-        youtubePlayer.$el = $(html);
+        youtubePlayer.$el = html;
 
         //YouTubePlayer.prototype.player;
         //console.log(YT);
@@ -127,7 +128,7 @@ var getYouTubePlayer = function(x, y, result){
     };
 
     youtubePlayer.init(result);
-    var youtubePlayer = Object.create(new NodeBase(youtubePlayer));
+    var youtubePlayer = Object.create(new NodeBase(youtubePlayer, "youtube"));
     return youtubePlayer;
 }
 

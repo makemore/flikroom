@@ -59,8 +59,18 @@ $(document).ready(function(){
     });
 
     io.socket.request("/node?room=" + roomId, null, function(nodes){
+        console.log(nodes);
         for (var i = 0; i < nodes.length; i++)
         {
+            switch (nodes[i].type)
+            {
+                case "youtube":
+                    var player = getYouTubePlayer(nodes[i].x,nodes[i].y, nodes[i].result);
+                break;
+                case "page":
+
+                break;
+            }
             //addNodeToCanvas(nodes[i].id, nodes[i].x, nodes[i].y);
         }
     });
