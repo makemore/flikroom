@@ -65,7 +65,7 @@ $(document).ready(function(){
             switch (nodes[i].type)
             {
                 case "youtube":
-                    var player = getYouTubePlayer(nodes[i].x,nodes[i].y, nodes[i].result);
+                    var player = getYouTubePlayer(nodes[i].x,nodes[i].y, nodes[i].result, nodes[i].id);
                 break;
                 case "page":
 

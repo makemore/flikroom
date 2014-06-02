@@ -1,4 +1,4 @@
-var NodeBase = function(node, type){
+var NodeBase = function(node, type, id){
     this.node = node;
     this.type = type;
     this.setupBase();
@@ -6,7 +6,7 @@ var NodeBase = function(node, type){
     this.inNodes = [];
     this.outNodes = [];
     this.links = [];
-    this.id = null;
+    this.id = id;
 }
 
 NodeBase.prototype.setupBase = function(){
@@ -40,6 +40,7 @@ NodeBase.prototype.save = function(){
 
 NodeBase.prototype.delete = function(){
     var that = this;
+    console.log(this);
     io.socket.delete("/node/" + this.id, {
 
         },

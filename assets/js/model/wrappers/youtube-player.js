@@ -31,26 +31,25 @@
 
 
 
-var getYouTubePlayer = function(x, y, result){
+var getYouTubePlayer = function(x, y, result, id) {
 
     var youtubePlayer = {};
 
     youtubePlayer.x = x;
     youtubePlayer.y = y;
     youtubePlayer.result = result;
+
     // Give the baby away
 
     youtubePlayer.init = function(result) {
-        var rndNum = Math.floor((Math.random() * 10000) + 1);
+        youtubePlayer.rndNum = Math.floor((Math.random() * 10000) + 1);
 
         var youtubeHtml = $.tmpl($("#tmpl-youtube-player").html(), {
-            rndNum: rndNum
+            rndNum: youtubePlayer.rndNum
         });
 
         var source   = $("#tmpl-node-base").html();
         var template = Handlebars.compile(source);
-
-
 
         var context = {
             title: youtubePlayer.result.title,
@@ -65,31 +64,10 @@ var getYouTubePlayer = function(x, y, result){
         $("#canvas").append(html);
 
 
-        //This isn't getting back to the base class
         youtubePlayer.$el = html;
 
-        //YouTubePlayer.prototype.player;
-        //console.log(YT);
-        if (window.YT === undefined) {
-            console.log("YT is undefined");
-            var tag = document.createElement('script');
-            tag.src = "https://www.youtube.com/iframe_api";
-            var firstScriptTag = document.getElementsByTagName('script')[0];
-            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-            window.onYouTubeIframeAPIReady = function () {
-                console.log("iframeApiReady");
-                addPlayer(rndNum);
-            }
-        }
-        else
-        {
-            console.log("YT is not undefined");
-            addPlayer(rndNum);
-        }
-
-
-        function addPlayer(rndNum){
-            youtubePlayer.player = new YT.Player('youtube-player' + rndNum, {
+        youtubePlayer.addPlayer = function(){
+            youtubePlayer.player = new YT.Player('youtube-player' + youtubePlayer.rndNum, {
                 height: '290',
                 width: '340',
                 videoId: result.id,
@@ -98,11 +76,59 @@ var getYouTubePlayer = function(x, y, result){
                     'onStateChange': onPlayerStateChange
                 }
             });
+            console.log(youtubePlayer);
         }
 
 
+        //YouTubePlayer.prototype.player;
+        //console.log(YT);
+        if (window.YT === undefined && window.youtubeLoading === undefined) {
+            console.log("here");
+            window.youtubeLoading = true;
+            //check if holding array exists
+            if (window.playersToLoadWhenReady === undefined)
+            {
+                window.playersToLoadWhenReady = [];
+            }
+            console.log(youtubePlayer);
+            window.playersToLoadWhenReady.push(youtubePlayer);
+
+            console.log("YT is undefined");
+            var tag = document.createElement('script');
+            tag.src = "https://www.youtube.com/iframe_api";
+            var firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+            window.onYouTubeIframeAPIReady = function () {
+                console.log("iframeApiReady");
+                for (var i = 0; i < window.playersToLoadWhenReady.length; i++)
+                {
+                    window.playersToLoadWhenReady[i].addPlayer();
+                }
+            }
+        }
+        else
+        {
+            console.log("YT is not undefined");
+
+            if (window.playersToLoadWhenReady === undefined)
+            {
+                window.playersToLoadWhenReady = [];
+            }
+
+            if (window.YT === undefined)
+            {
+                window.playersToLoadWhenReady.push(youtubePlayer);
+            }
+            //youtubePlayer.addPlayer();
+        }
+
+
+
+
+
         function onPlayerReady(event) {
-            event.target.playVideo();
+            //event.target.playVideo();
         }
 
         // 5. The API calls this function when the player's state changes.
@@ -128,8 +154,10 @@ var getYouTubePlayer = function(x, y, result){
     };
 
     youtubePlayer.init(result);
-    var youtubePlayer = Object.create(new NodeBase(youtubePlayer, "youtube"));
-    return youtubePlayer;
+
+    //can't take over youtubePlayer, as we need that for the reference for things to lazy load for youtube videos.
+    var returnedObject = Object.create(new NodeBase(youtubePlayer, "youtube", id));
+    return returnedObject;
 }
 
 
