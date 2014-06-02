@@ -54,7 +54,7 @@
 </script>
 
 <script type="text/x-handlebars-template" id="tmpl-node-base">
-    <div class='{{className}}' style="left:{{left}}px; top:{{top}}px;">
+    <div class='{{className}}' style="left:{{left}}px; top:{{top}}px;" id="node-{{id}}">
         <div class="node-menu">{{title}}<div class="node-close">X</div></div>
         {{{body}}}
         <div class="node-footer">
@@ -67,7 +67,7 @@
 
 <div id="canvasContainer">
     <div id="canvas">
-        <div class="node"></div>
+
     </div>
 
     <div id="chatContainer" ng-controller="ChatCtrl">

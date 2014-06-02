@@ -30,16 +30,25 @@
  */
 
 
-
-var getYouTubePlayer = function(x, y, result, id) {
+// x, y, result, id
+var getYouTubePlayer = function(params) {
 
     var youtubePlayer = {};
 
-    youtubePlayer.x = x;
-    youtubePlayer.y = y;
-    youtubePlayer.result = result;
+    youtubePlayer.x = params.x;
+    youtubePlayer.y = params.y;
+    youtubePlayer.result = params.result;
 
     // Give the baby away
+
+    youtubePlayer.local = false;
+
+    if (params.id === undefined)
+    {
+        params.id = "client-" + window.world.getNextClientId();
+        youtubePlayer.local = true;
+    }
+
 
     youtubePlayer.init = function(result) {
         youtubePlayer.rndNum = Math.floor((Math.random() * 10000) + 1);
@@ -56,7 +65,8 @@ var getYouTubePlayer = function(x, y, result, id) {
             left: this.x,
             top: this.y,
             body: youtubeHtml[0].outerHTML,
-            className: "node-youtube-player"
+            className: "node-youtube-player",
+            id: params.id
         };
 
         var html = $(template(context)); //have to wrap in jquery before appending to keep reference;
@@ -120,7 +130,11 @@ var getYouTubePlayer = function(x, y, result, id) {
             {
                 window.playersToLoadWhenReady.push(youtubePlayer);
             }
-            //youtubePlayer.addPlayer();
+            else
+            {
+                youtubePlayer.addPlayer();
+            }
+            //
         }
 
 
@@ -153,10 +167,12 @@ var getYouTubePlayer = function(x, y, result, id) {
 
     };
 
-    youtubePlayer.init(result);
+    youtubePlayer.init(youtubePlayer.result);
 
     //can't take over youtubePlayer, as we need that for the reference for things to lazy load for youtube videos.
-    var returnedObject = Object.create(new NodeBase(youtubePlayer, "youtube", id));
+
+    var returnedObject = Object.create(new NodeBase({node:youtubePlayer, type:"youtube", id: params.id }));
+
     return returnedObject;
 }
 

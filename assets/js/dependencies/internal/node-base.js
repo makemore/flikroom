@@ -1,12 +1,22 @@
-var NodeBase = function(node, type, id){
-    this.node = node;
-    this.type = type;
+var NodeBase = function(params){
+    this.node = params.node;
+    this.type = params.type;
     this.setupBase();
     this.setupLinking();
     this.inNodes = [];
     this.outNodes = [];
     this.links = [];
-    this.id = id;
+    this.id = params.id;
+
+
+    this.setId = function(id) {
+        this.id = id;
+    }
+
+    this.getId = function() {
+        return this.id;
+    }
+
 }
 
 NodeBase.prototype.setupBase = function(){
@@ -34,14 +44,22 @@ NodeBase.prototype.save = function(){
     }, function(response)
     {
         console.log(response);
-        this.id = response.id;
+        if (that.node.local)
+        {
+            that.node.$el.attr("id", "node-" + response.id);
+            console.log(that);
+            that.prototype.id = response.id;
+            //CAN'T FUCKING GET ACCESS TO ROOT OBJECT!
+            console.log(that);
+        }
+
     });
 }
 
 NodeBase.prototype.delete = function(){
     var that = this;
-    console.log(this);
-    io.socket.delete("/node/" + this.id, {
+    console.log(that);
+    io.socket.delete("/node/" + this.getId(), {
 
         },
         function(response)
@@ -54,7 +72,9 @@ NodeBase.prototype.setupLinking = function(){
     var isDragging = false;
     var startLeft = 0;
     var startTop = 0;
+    var that = this;
 
+    console.log("setup linking");
 
     $(".node-handle").on("mousedown", this.node.$el, function(e){
         //alert("here");
@@ -63,18 +83,7 @@ NodeBase.prototype.setupLinking = function(){
         e.preventDefault();
         e.stopPropagation();
 
-        /*
-         $(window).mousemove(function() {
-         isDragging = true;
-         $(window).unbind("mousemove");
-         });
-         */
-        /*
-         console.log(e);
-         var player = $(e.currentTarget).parent().parent();
-         $("#canvas").append("<svg height='210' width='400' style='position:absolute;left:" + player.css("left") + ";top:" + player.css("top") + ";z-index:1000;'><path d='M85,65 C339,66 170,369 406,372 Z' /></svg>");
-         */
-        console.log("down");
+
 
         var player = $(e.currentTarget).parent().parent();
 
@@ -88,7 +97,9 @@ NodeBase.prototype.setupLinking = function(){
             startLeft = startLeft + player.width();
         }
 
-        //dropTempMarker(startLeft,startTop, "s");
+        console.log(that);
+
+        return false;
     });
 
 
@@ -153,7 +164,7 @@ NodeBase.prototype.setupLinking = function(){
             topLeftToBottomRight = false;
         }
 
-
+        console.log(player);
         var nodeLink = new NodeLink(finalLeft,finalTop,width,height, topLeftToBottomRight);
 
     });

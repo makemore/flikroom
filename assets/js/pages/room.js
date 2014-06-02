@@ -33,6 +33,10 @@ $.fn.pressEnter = function(fn) {
 // Repeat above here for any further scrolled elements
 
 $(document).ready(function(){
+
+    window.world = new World();
+
+
     $("#canvas").draggable();
     $(".thing").draggable();
     var width = $("#canvas").width();
@@ -65,13 +69,12 @@ $(document).ready(function(){
             switch (nodes[i].type)
             {
                 case "youtube":
-                    var player = getYouTubePlayer(nodes[i].x,nodes[i].y, nodes[i].result, nodes[i].id);
+                    window.world.nodes.push(getYouTubePlayer({ x: nodes[i].x,y: nodes[i].y, result: nodes[i].result, id: nodes[i].id }));
                 break;
                 case "page":
 
                 break;
             }
-            //addNodeToCanvas(nodes[i].id, nodes[i].x, nodes[i].y);
         }
     });
 
