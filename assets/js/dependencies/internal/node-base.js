@@ -85,29 +85,27 @@ NodeBase.prototype.setupLinking = function(){
     var endingIn = true;
     var startId = null;
     var endId = null;
+    var startInput = true;
+    var endInput = true;
 
     $(".node-handle").on("mousedown", this.node.$el, function(e){
         //alert("here");
         //<path d="M78,303 C215,298 246,90 406,372" />
         //var path = document.createElement("path");
-        e.preventDefault();
-        e.stopPropagation();
+
 
 
 
         var player = $(e.currentTarget).parent().parent();
 
-        startLeft = player.css("left").split("px")[0];
-        startTop = player.css("top").split("px")[0];
-        startLeft = parseInt(startLeft);
-        startTop = parseInt(startTop) + player.height();
+        startId = player.attr("id").split('-')[1];
 
         if ($(e.currentTarget).hasClass("handle-output"))
         {
-            startLeft = startLeft + player.width();
-            startingIn = false;
+            startInput = false;
         }
-        startId = $(player).attr("id").split('-')[1];
+        e.preventDefault();
+        e.stopPropagation();
 
         return false;
     });
@@ -127,68 +125,21 @@ NodeBase.prototype.setupLinking = function(){
 
         var player = $(e.currentTarget).parent().parent();
 
-        var stopLeft = player.css("left").split("px")[0];
-        var stopTop = player.css("top").split("px")[0];
-
-        stopLeft = parseInt(stopLeft);
-        stopTop = parseInt(stopTop) + player.height();
-
         if ($(e.currentTarget).hasClass("handle-output"))
         {
-            stopLeft = stopLeft + player.width();
-            endingIn = false;
-        }
-
-
-        var finalLeft = null;
-        var finalTop = null;
-
-        var width = null;
-        var height = null;
-
-        var topLeftToBottomRight = true;
-
-        if (startLeft > stopLeft) {
-            finalLeft = stopLeft;
-            width = startLeft - stopLeft;
-        } else {
-            finalLeft = startLeft;
-            width = stopLeft - startLeft;
-        }
-
-        if (startTop < stopTop) {
-            finalTop = startTop;
-            height = stopTop - startTop;
-        } else {
-            finalTop = stopTop;
-            height = startTop - stopTop;
-        }
-
-        if (startLeft > stopLeft && startTop < stopTop)
-        {
-            // bottom left direction
-            topLeftToBottomRight = false;
-        }
-
-        if (startLeft < stopLeft && startTop > stopTop)
-        {
-            topLeftToBottomRight = false;
+            endInput = false;
         }
 
 
         endId = $(player).attr("id").split('-')[1];
 
-        console.log(startId);
+
 
         var startNode = window.world.getNodeById(startId);
 
-        console.log(endId);
         var endNode = window.world.getNodeById(endId);
 
-        var nodeLink = new NodeLink(finalLeft, finalTop, width, height, topLeftToBottomRight);
-
-        console.log(startNode);
-        console.log(endNode);
+        var nodeLink = new NodeLink(startId, endId, startInput, endInput);
 
         if (startingIn){
             startNode.addInNode(nodeLink);
@@ -213,8 +164,10 @@ NodeBase.prototype.addInNode = function(nodeLink){
     var that = this;
     that.nodes.inNodes.push(nodeLink);
 
+
+    /*
     io.socket.put("/node/" + that.node.id, {
-        inNodes: 
+        inNodes:
     }, function(response)
     {
         console.log(response);
@@ -230,6 +183,7 @@ NodeBase.prototype.addInNode = function(nodeLink){
         }
 
     });
+    */
 }
 
 
