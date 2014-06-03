@@ -69,7 +69,7 @@ $(document).ready(function(){
             switch (nodes[i].type)
             {
                 case "youtube":
-                    window.world.nodes.push(getYouTubePlayer({ x: nodes[i].x,y: nodes[i].y, result: nodes[i].result, id: nodes[i].id }));
+                    window.world.addNodeToWorld(getYouTubePlayer({ x: nodes[i].x,y: nodes[i].y, result: nodes[i].result, id: nodes[i].id }));
                 break;
                 case "page":
 

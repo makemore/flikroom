@@ -9,7 +9,11 @@ var World = function(){
 
 
 World.prototype.getNodeById = function(id){
-    return $.grep(this.nodes, function(e){ return e.id == id; });
+    return $.grep(this.nodes, function(e){ return e.node.id == id; })[0];
+}
+
+World.prototype.addNodeToWorld = function(node){
+    this.nodes.push(node);
 }
 
 World.prototype.getNextClientId = function(){

@@ -86,9 +86,7 @@ var getYouTubePlayer = function(params) {
                     'onStateChange': onPlayerStateChange
                 }
             });
-            console.log(youtubePlayer);
         }
-
 
         //YouTubePlayer.prototype.player;
         //console.log(YT);
