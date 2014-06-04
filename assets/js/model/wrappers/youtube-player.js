@@ -30,14 +30,30 @@
  */
 
 
+/*
+
+ that.id = params.id; //just pure ID
+ that.x = params.x;
+ that.y = params.y;
+ that.type = params.type;
+ that.$el = params.$el;
+ that.result = params.result;
+ that.local = params.local;
+ */
+
+
 // x, y, result, id
 var getYouTubePlayer = function(params) {
 
-    var youtubePlayer = {};
+    params.id = params.id || "client-" + window.world.getNextClientId(); // default parameter value.. If I always have access to el, then do a i need to set a temp client id?
 
-    youtubePlayer.x = params.x;
-    youtubePlayer.y = params.y;
-    youtubePlayer.result = params.result;
+    var youtubePlayer = nodeBase({
+        x: params.x,
+        y: params.y,
+        type: "youtube",
+        result: params.result,
+        id: params.id
+    });
 
     // Give the baby away
 
@@ -45,7 +61,6 @@ var getYouTubePlayer = function(params) {
 
     if (params.id === undefined)
     {
-        params.id = "client-" + window.world.getNextClientId();
         youtubePlayer.local = true;
     }
 
@@ -62,11 +77,11 @@ var getYouTubePlayer = function(params) {
 
         var context = {
             title: youtubePlayer.result.title,
-            left: this.x,
-            top: this.y,
+            left: youtubePlayer.x,
+            top: youtubePlayer.y,
             body: youtubeHtml[0].outerHTML,
             className: "node-youtube-player",
-            id: params.id
+            id: youtubePlayer.id
         };
 
         var html = $(template(context)); //have to wrap in jquery before appending to keep reference;
@@ -91,14 +106,12 @@ var getYouTubePlayer = function(params) {
         //YouTubePlayer.prototype.player;
         //console.log(YT);
         if (window.YT === undefined && window.youtubeLoading === undefined) {
-            console.log("here");
             window.youtubeLoading = true;
             //check if holding array exists
             if (window.playersToLoadWhenReady === undefined)
             {
                 window.playersToLoadWhenReady = [];
             }
-            console.log(youtubePlayer);
             window.playersToLoadWhenReady.push(youtubePlayer);
 
             console.log("YT is undefined");
@@ -155,7 +168,7 @@ var getYouTubePlayer = function(params) {
              }*/
         }
         function stopVideo() {
-            player.stopVideo();
+            youtubePlayer.player.stopVideo();
         }
 
         //this.initConnectionPaths();
@@ -166,12 +179,8 @@ var getYouTubePlayer = function(params) {
     };
 
     youtubePlayer.init(youtubePlayer.result);
-
-    //can't take over youtubePlayer, as we need that for the reference for things to lazy load for youtube videos.
-
-    var returnedObject = Object.create(new NodeBase({node:youtubePlayer, type:"youtube", id: params.id }));
-
-    return returnedObject;
+    youtubePlayer.initBase();
+    return youtubePlayer;
 }
 
 
