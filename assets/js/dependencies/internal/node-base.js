@@ -7,6 +7,8 @@ var nodeBase = function(params) {
     //that.$el = params.$el; set in child object
     that.result = params.result;
     that.local = params.local;
+    that.inNodes = [];
+    that.outNodes = [];
 
     that.setupBase = function(){
         $(".node-close").on("click", that.$el, function(e){
@@ -25,18 +27,11 @@ var nodeBase = function(params) {
             result: that.result
         }, function(response)
         {
-            console.log(response);
-            if (that.local)
+            if (that.id.indexOf("client") > -1)
             {
                 that.$el.attr("id", "node-" + response.id);
-                console.log(that);
                 that.id = response.id;
-                //CAN'T FUCKING GET ACCESS TO ROOT OBJECT!
-                //OK, so can't directly access root variables, but can access sub properties of objects.. Odd
-
-                console.log(that.id);
             }
-
         });
     }
 
@@ -61,28 +56,40 @@ var nodeBase = function(params) {
         var startInput = true;
         var endInput = true;
 
-        $(".node-handle").on("mousedown", this.$el, function (e) {
+
+        //double binding events...
+
+        that.$el.find(".node-handle").on("mousedown", function (e) {
             //alert("here");
             //<path d="M78,303 C215,298 246,90 406,372" />
             //var path = document.createElement("path");
-
+            console.log("mousedown");
 
             var player = $(e.currentTarget).parent().parent();
 
             startId = player.attr("id").split('-')[1];
 
             if ($(e.currentTarget).hasClass("handle-output")) {
-                startInput = false;
+                window.world.startInput = false;
+                console.log("output");
             }
+            else
+            {
+                console.log("input");
+            }
+
             e.preventDefault();
             e.stopPropagation();
 
+            //storing mininal information about starting node globally
+            window.world.startId = startId;
+            window.world.startInput = startInput;
             return false;
         });
 
 
-        $(".node-handle").mouseup(function (e) {
-
+        that.$el.find(".node-handle").on("mouseup", function (e) {
+            console.log("mouseup");
             //need to work out top left position
             //then just extend width and height of div based on bottom right
 
@@ -94,32 +101,82 @@ var nodeBase = function(params) {
 
             if ($(e.currentTarget).hasClass("handle-output")) {
                 endInput = false;
+                console.log("output");
+            }
+            else
+            {
+                console.log("input");
             }
 
+
+            //Problem, not getting access to the same scope on mouse down, and mouse up..
+
+            //This is a problem.. need to be able to wire up across instances..
+
+
+            console.log(window.world.startId);
 
             endId = $(player).attr("id").split('-')[1];
 
 
-            var startNode = window.world.getNodeById(startId);
+
+            var startNode = window.world.getNodeById(window.world.startId);
 
             var endNode = window.world.getNodeById(endId);
 
-            var nodeLink = new NodeLink(startId, endId, startInput, endInput);
+
+            var nodeLink = getNodeLink({ startId:window.world.startId, endId:endId, startInput:window.world.startInput, endInput:endInput });
 
             if (startingIn) {
                 startNode.addInNode(nodeLink);
             } else {
-                startNode.nodes.outNodes.push(nodeLink);
+                startNode.addOutNode(nodeLink);
             }
 
             if (endingIn) {
-                endNode.nodes.inNodes.push(nodeLink);
+                endNode.addInNode(nodeLink);
             } else {
-                endNode.nodes.outNodes.push(nodeLink);
+                endNode.addOutNode(nodeLink);
             }
         });
 
     }
+
+    that.addInNode = function(nodeLink){
+        that.inNodes.push(nodeLink);
+    }
+
+    that.addOutNode = function(nodeLink){
+        that.outNodes.push(nodeLink);
+    }
+
+    //io.socket.put("/node/" + id, { x: $(this).css("left"), y: $(this).css("top")}, function(response)
+
+
+
+
+    /*
+     io.socket.put("/node/" + that.node.id, {
+     inNodes:
+     }, function(response)
+     {
+     console.log(response);
+     if (that.node.local)
+     {
+     that.node.$el.attr("id", "node-" + response.id);
+     console.log(that);
+     that.node.id = response.id;
+     //CAN'T FUCKING GET ACCESS TO ROOT OBJECT!
+     //OK, so can't directly access root variables, but can access sub properties of objects.. Odd
+
+     console.log(that.node.id);
+     }
+
+     });
+     */
+
+
+
 
     that.initBase = function(){
         that.setupBase();
@@ -129,32 +186,6 @@ var nodeBase = function(params) {
     return that;
 }
 
-var NodeBase = function(params){
-    this.node = params.node;
-    this.type = params.type;
-    this.setupBase();
-    this.setupLinking();
-    this.nodes = {
-        inNodes: [],
-        outNodes: []
-    }
-    this.links = [];
-    //this.id = params.id; Can't store ID here, as it can't be changed after initalised, via prototype method?
-    //Odd need to get better at this..
-    //Now using this.node.id as location of id
-    this.node.id = params.id;
-
-
-    //These are not used at the moment (just direct access to this.node.id)
-    this.setId = function(id) {
-        this.id = id;
-    }
-
-    this.getId = function() {
-        return this.id;
-    }
-
-}
 
 
 
@@ -162,39 +193,3 @@ var NodeBase = function(params){
 
 
 
-
-
-
-
-
-NodeBase.prototype.addInNode = function(nodeLink){
-    //io.socket.put("/node/" + id, { x: $(this).css("left"), y: $(this).css("top")}, function(response)
-    var that = this;
-    that.nodes.inNodes.push(nodeLink);
-
-
-    /*
-    io.socket.put("/node/" + that.node.id, {
-        inNodes:
-    }, function(response)
-    {
-        console.log(response);
-        if (that.node.local)
-        {
-            that.node.$el.attr("id", "node-" + response.id);
-            console.log(that);
-            that.node.id = response.id;
-            //CAN'T FUCKING GET ACCESS TO ROOT OBJECT!
-            //OK, so can't directly access root variables, but can access sub properties of objects.. Odd
-
-            console.log(that.node.id);
-        }
-
-    });
-    */
-}
-
-
-NodeBase.prototype.baseFunction = function(){
-    //everyone can do this
-}
