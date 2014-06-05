@@ -53,7 +53,7 @@ var nodeBase = function(params) {
         var endingIn = true;
         var startId = null;
         var endId = null;
-        var startInput = true;
+
         var endInput = true;
 
 
@@ -66,6 +66,8 @@ var nodeBase = function(params) {
             console.log("mousedown");
 
             var player = $(e.currentTarget).parent().parent();
+
+            window.world.startInput = true;
 
             startId = player.attr("id").split('-')[1];
 
@@ -83,7 +85,7 @@ var nodeBase = function(params) {
 
             //storing mininal information about starting node globally
             window.world.startId = startId;
-            window.world.startInput = startInput;
+            //window.world.startInput = startInput; allready defined above.
             return false;
         });
 
