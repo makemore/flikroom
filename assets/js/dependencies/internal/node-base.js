@@ -129,7 +129,7 @@ var nodeBase = function(params) {
 
             var nodeLink = getNodeLink({ startId:window.world.startId, endId:endId, startInput:window.world.startInput, endInput:endInput });
 
-            if (startingIn) {
+            if (window.world.startInput) {
                 startNode.addInNode(nodeLink);
             } else {
                 startNode.addOutNode(nodeLink);
@@ -146,6 +146,27 @@ var nodeBase = function(params) {
 
     that.addInNode = function(nodeLink){
         that.inNodes.push(nodeLink);
+        console.log(nodeLink);
+
+        //a node link will always contain it own id, and the other. The other should always be added.
+
+        var idToSend = 0;
+        if (nodeLink.startId == that.id)
+        {
+            idToSend = nodeLink.endId
+        } else
+        {
+            idToSend = nodeLink.startId;
+        }
+
+
+        io.socket.request("/node/addInNode", {
+            nodeId: that.id,
+            addId : parseInt(idToSend)
+        }, function(response){
+            console.log(response);
+        });
+
     }
 
     that.addOutNode = function(nodeLink){

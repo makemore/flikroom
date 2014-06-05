@@ -124,6 +124,7 @@ var getNodeLink = function(params){
     }
 
     that.init();
+    return that;
 }
 
 
