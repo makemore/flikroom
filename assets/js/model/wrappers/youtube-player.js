@@ -29,249 +29,165 @@
 
  */
 
-var YouTubePlayer = function(x, y, result){
-  this.x = x;
-  this.y = y;
-  this.init(result);
-};
+
+/*
+
+ that.id = params.id; //just pure ID
+ that.x = params.x;
+ that.y = params.y;
+ that.type = params.type;
+ that.$el = params.$el;
+ that.result = params.result;
+ that.local = params.local;
+ */
 
 
+// x, y, result, id
+var getYouTubePlayer = function(params) {
 
+    params.id = params.id || "client-" + window.world.getNextClientId(); // default parameter value.. If I always have access to el, then do a i need to set a temp client id?
 
-
-
-YouTubePlayer.prototype.init = function(result) {
-    var rndNum = Math.floor((Math.random() * 10000) + 1);
-    var youtubePlayer = $.tmpl($("#tmpl-youtube-player").html(), {
-        left: this.x,
-        top: this.y,
-        rndNum: rndNum,
-        title: result.title
-    });
-    $("#canvas").append(youtubePlayer);
-
-    youtubePlayer = $(youtubePlayer);
-
-
-    //This should be refactored into a base "node" class
-    youtubePlayer.find(".node-close").on("click", function(){
-        $(youtubePlayer).remove();
+    var youtubePlayer = nodeBase({
+        x: params.x,
+        y: params.y,
+        type: "youtube",
+        result: params.result,
+        id: params.id
     });
 
-    youtubePlayer.draggable({ handle: ".node-menu" });
+    // Give the baby away
 
-    //YouTubePlayer.prototype.player;
-    //console.log(YT);
-    if (window.YT === undefined) {
-        console.log("YT is undefined");
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-        window.onYouTubeIframeAPIReady = function () {
-            console.log("iframeApiReady");
-            addPlayer(rndNum);
-        }
-    }
-    else
+    youtubePlayer.local = false;
+
+    if (params.id === undefined)
     {
-        console.log("YT is not undefined");
-        addPlayer(rndNum);
+        youtubePlayer.local = true;
     }
 
 
-    function addPlayer(rndNum){
-        YouTubePlayer.prototype.player = new YT.Player('youtube-player' + rndNum, {
-            height: '290',
-            width: '340',
-            videoId: result.id,
-            events: {
-                'onReady': onPlayerReady,
-                'onStateChange': onPlayerStateChange
+    youtubePlayer.init = function(result) {
+        youtubePlayer.rndNum = Math.floor((Math.random() * 10000) + 1);
+
+        var youtubeHtml = $.tmpl($("#tmpl-youtube-player").html(), {
+            rndNum: youtubePlayer.rndNum
+        });
+
+        var source   = $("#tmpl-node-base").html();
+        var template = Handlebars.compile(source);
+
+        var context = {
+            title: youtubePlayer.result.title,
+            left: youtubePlayer.x,
+            top: youtubePlayer.y,
+            body: youtubeHtml[0].outerHTML,
+            className: "node-youtube-player",
+            id: youtubePlayer.id
+        };
+
+        var html = $(template(context)); //have to wrap in jquery before appending to keep reference;
+
+        $("#canvas").append(html);
+
+
+        youtubePlayer.$el = html;
+
+        youtubePlayer.addPlayer = function(){
+            youtubePlayer.player = new YT.Player('youtube-player' + youtubePlayer.rndNum, {
+                height: '290',
+                width: '340',
+                videoId: result.id,
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        //YouTubePlayer.prototype.player;
+        //console.log(YT);
+        if (window.YT === undefined && window.youtubeLoading === undefined) {
+            window.youtubeLoading = true;
+            //check if holding array exists
+            if (window.playersToLoadWhenReady === undefined)
+            {
+                window.playersToLoadWhenReady = [];
             }
-        });
-    }
+            window.playersToLoadWhenReady.push(youtubePlayer);
 
+            console.log("YT is undefined");
+            var tag = document.createElement('script');
+            tag.src = "https://www.youtube.com/iframe_api";
+            var firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    function onPlayerReady(event) {
-        event.target.playVideo();
-    }
-
-    // 5. The API calls this function when the player's state changes.
-    //    The function indicates that when playing a video (state=1),
-    //    the player should play for six seconds and then stop.
-
-    var done = false;
-    function onPlayerStateChange(event) {
-        /*if (event.data == YT.PlayerState.PLAYING && !done) {
-            setTimeout(stopVideo, 6000);
-            done = true;
-        }*/
-    }
-    function stopVideo() {
-        player.stopVideo();
-    }
-
-    //this.initConnectionPaths();
-
-
-    var isDragging = false;
-
-
-    var startLeft = 0;
-    var startTop = 0;
-
-    $(".node-handle").on("mousedown", youtubePlayer, function(e){
-        //alert("here");
-        //<path d="M78,303 C215,298 246,90 406,372" />
-        //var path = document.createElement("path");
-        e.preventDefault();
-        e.stopPropagation();
-
-        /*
-        $(window).mousemove(function() {
-            isDragging = true;
-            $(window).unbind("mousemove");
-        });
-        */
-        /*
-        console.log(e);
-        var player = $(e.currentTarget).parent().parent();
-        $("#canvas").append("<svg height='210' width='400' style='position:absolute;left:" + player.css("left") + ";top:" + player.css("top") + ";z-index:1000;'><path d='M85,65 C339,66 170,369 406,372 Z' /></svg>");
-        */
-        console.log("down");
-
-        var player = $(e.currentTarget).parent().parent();
-
-        startLeft = player.css("left").split("px")[0];
-        startTop = player.css("top").split("px")[0];
-        startLeft = parseInt(startLeft);
-        startTop = parseInt(startTop) + player.height();
-
-        if ($(e.currentTarget).hasClass("handle-output"))
+            window.onYouTubeIframeAPIReady = function () {
+                console.log("iframeApiReady");
+                for (var i = 0; i < window.playersToLoadWhenReady.length; i++)
+                {
+                    window.playersToLoadWhenReady[i].addPlayer();
+                }
+            }
+        }
+        else
         {
-            startLeft = startLeft + player.width();
-        }
+            console.log("YT is not undefined");
 
-        //dropTempMarker(startLeft,startTop, "s");
-    });
+            if (window.playersToLoadWhenReady === undefined)
+            {
+                window.playersToLoadWhenReady = [];
+            }
 
-
-    //original test method for binding onto background canvas
-
-    /*
-    $(window).mouseup(function(e){
-
-        //need to work out top left position
-        //then just extend width and height of div based on bottom right
-
-        var stopLeft = e.offsetX;
-        var stopTop = e.offsetY;
-
-        var finalLeft = null;
-        var finalTop = null;
-
-        var width = null;
-        var height = null;
-
-        var topLeftToBottomRight = true;
-
-        if (startLeft > stopLeft) {
-            finalLeft = stopLeft;
-            width = startLeft - stopLeft;
-        } else {
-            finalLeft = startLeft;
-            width = stopLeft - startLeft;
-        }
-
-        if (startTop < stopTop) {
-            finalTop = startTop;
-            height = stopTop - startTop;
-        } else {
-            finalTop = stopTop;
-            height = startTop - stopTop;
-        }
-
-        if (startLeft > stopLeft && startTop < stopTop)
-        {
-            // bottom left direction
-            topLeftToBottomRight = false;
-        }
-
-        if (startLeft < stopLeft && startTop > stopTop)
-        {
-            topLeftToBottomRight = false;
+            if (window.YT === undefined)
+            {
+                window.playersToLoadWhenReady.push(youtubePlayer);
+            }
+            else
+            {
+                youtubePlayer.addPlayer();
+            }
+            //
         }
 
 
-        var nodeLink = new NodeLink(finalLeft,finalTop,width,height, topLeftToBottomRight);
 
-    });
-    */
 
-    $(".node-handle").mouseup(function(e){
 
-        //need to work out top left position
-        //then just extend width and height of div based on bottom right
-
-        e.preventDefault();
-        e.stopPropagation();
-
-        var player = $(e.currentTarget).parent().parent();
-
-        var stopLeft = player.css("left").split("px")[0];
-        var stopTop = player.css("top").split("px")[0];
-
-        stopLeft = parseInt(stopLeft);
-        stopTop = parseInt(stopTop) + player.height();
-
-        if ($(e.currentTarget).hasClass("handle-output"))
-        {
-            stopLeft = stopLeft + player.width();
+        function onPlayerReady(event) {
+            //event.target.playVideo();
         }
 
+        // 5. The API calls this function when the player's state changes.
+        //    The function indicates that when playing a video (state=1),
+        //    the player should play for six seconds and then stop.
 
-        var finalLeft = null;
-        var finalTop = null;
-
-        var width = null;
-        var height = null;
-
-        var topLeftToBottomRight = true;
-
-        if (startLeft > stopLeft) {
-            finalLeft = stopLeft;
-            width = startLeft - stopLeft;
-        } else {
-            finalLeft = startLeft;
-            width = stopLeft - startLeft;
+        var done = false;
+        function onPlayerStateChange(event) {
+            /*if (event.data == YT.PlayerState.PLAYING && !done) {
+             setTimeout(stopVideo, 6000);
+             done = true;
+             }*/
+        }
+        function stopVideo() {
+            youtubePlayer.player.stopVideo();
         }
 
-        if (startTop < stopTop) {
-            finalTop = startTop;
-            height = stopTop - startTop;
-        } else {
-            finalTop = stopTop;
-            height = startTop - stopTop;
-        }
-
-        if (startLeft > stopLeft && startTop < stopTop)
-        {
-            // bottom left direction
-            topLeftToBottomRight = false;
-        }
-
-        if (startLeft < stopLeft && startTop > stopTop)
-        {
-            topLeftToBottomRight = false;
-        }
+        //this.initConnectionPaths();
 
 
-        var nodeLink = new NodeLink(finalLeft,finalTop,width,height, topLeftToBottomRight);
 
-    });
 
-};
+    };
+
+    youtubePlayer.init(youtubePlayer.result);
+    youtubePlayer.initBase();
+    return youtubePlayer;
+}
+
+
+
+
+
+
 
 function dropTempMarker(x,y, identify){
     var center = $.tmpl($("#tmpl-search-node").html(), {
@@ -286,19 +202,3 @@ function dropTempMarker(x,y, identify){
         $(center).remove();
     }, 2000);
 }
-
-
-YouTubePlayer.prototype.initConnectionPaths = function(){
-
-}
-
-
-
-//Create a new object of type Person
-//var youtube = new YouTubePlayer("YouTube", 5000, 5000);
-
-YouTubePlayer.prototype.sayMyName = function() {
-    alert('Hello, my name is ' + this.getName());
-};
-
-//youtube.sayMyName();

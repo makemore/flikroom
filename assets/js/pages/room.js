@@ -33,6 +33,10 @@ $.fn.pressEnter = function(fn) {
 // Repeat above here for any further scrolled elements
 
 $(document).ready(function(){
+
+    window.world = new World();
+
+
     $("#canvas").draggable();
     $(".thing").draggable();
     var width = $("#canvas").width();
@@ -59,9 +63,18 @@ $(document).ready(function(){
     });
 
     io.socket.request("/node?room=" + roomId, null, function(nodes){
+        console.log(nodes);
         for (var i = 0; i < nodes.length; i++)
         {
-            //addNodeToCanvas(nodes[i].id, nodes[i].x, nodes[i].y);
+            switch (nodes[i].type)
+            {
+                case "youtube":
+                    window.world.addNodeToWorld(getYouTubePlayer({ x: nodes[i].x,y: nodes[i].y, result: nodes[i].result, id: nodes[i].id }));
+                break;
+                case "page":
+
+                break;
+            }
         }
     });
 
