@@ -160,9 +160,11 @@ var nodeBase = function(params) {
         }
 
 
-        io.socket.request("/node/addInNode", {
-            nodeId: that.id,
-            addId : parseInt(idToSend)
+        io.socket.request("/node/addNodeLink", {
+            startId: nodeLink.startId,
+            startInput : nodeLink.startInput,
+            endId : nodeLink.endId,
+            endInput : nodeLink.endInput
         }, function(response){
             console.log(response);
         });
