@@ -50,63 +50,84 @@ $(document).ready(function(){
     });
 
     io.socket.on("node", function(node){
-        //console.log(node);
+        console.log(node);
+        console.log(node.data.inNodes);
         if (node.verb == "created" && node.data.room == roomId) {
-            addNodeToCanvas(node.data.id, node.data.x,node.data.y);
-        } else if (node.verb == "updated" && node.data.room == roomId)
-        {
-            console.log(node);
+            addNodeToCanvas(node.data);
+        }
+        else if (node.verb == "updated" && node.data.x != undefined) {
+            // do this stuff, if sending x/y in the message
+
+            var nodeFromWorld = window.world.getNodeById(node.id);
+
+            //position change
+            //Not a very good way of switching on the update data.
+
             $("#node-" + node.id).css("left", node.data.x);
             $("#node-" + node.id).css("top", node.data.y);
+
+            for (var i = 0; i < nodeFromWorld.inNodes.length; i++) {
+                nodeFromWorld.inNodes[i].init();
+            }
+
+            for (var i = 0; i < nodeFromWorld.outNodes.length; i++) {
+                nodeFromWorld.outNodes[i].init();
+            }
+
+        }
+        else if (node.verb == "updated" && node.data.inNodes != undefined)
+        {
+            var nodeFromWorld = window.world.getNodeById(node.id);
+            nodeFromWorld.inNodeIds = node.data.inNodes;
+            console.log(nodeFromWorld);
+            setTimeout(function(){
+                nodeFromWorld.drawInLinks();
+            },1000);
+
+        } else if (node.verb == "updated" && node.data.outNodes != undefined) {
+            var nodeFromWorld = window.world.getNodeById(node.id);
+            nodeFromWorld.outNodes = node.data.outNodes;
+            console.log(nodeFromWorld);
+            setTimeout(function(){
+                nodeFromWorld.drawOutLinks();
+            },1000);
         }
 
+        else if (node.verb == "destroyed")
+        {
+            var nodeFromWorld = window.world.getNodeById(node.id);
+            nodeFromWorld.delete(); //Still need to remove reference from world...
+        }
     });
 
     io.socket.request("/node?room=" + roomId, null, function(nodes){
         console.log(nodes);
         for (var i = 0; i < nodes.length; i++)
         {
-            switch (nodes[i].type)
-            {
-                case "youtube":
-                    window.world.addNodeToWorld(getYouTubePlayer({
-                        x: nodes[i].x,
-                        y: nodes[i].y,
-                        result: nodes[i].result,
-                        id: nodes[i].id,
-                        inNodeIds: nodes[i].inNodes,
-                        outNodeIds: nodes[i].outNodes
-                    }));
-                break;
-                case "page":
-
-                break;
-            }
+           addNodeToCanvas(nodes[i]);
         }
     });
 
 
-    function addNodeToCanvas(id, x, y)
-    {
-        var node = document.createElement('div');
-        node.className = "node";
-        node = $(node);
-        node.css("left", x );
-        node.css("top", y );
-        node.attr("id", "node-" + id);
-        node.draggable({
-            drag: function(e) {
-                var target = $(e.target);
-                var id = target.attr("id").split("-")[1];
-                io.socket.put("/node/" + id, { x: $(this).css("left"), y: $(this).css("top")}, function(response)
-                {
-                    console.log(response);
-                });
 
-            }
-        });
-        node.css("position", "absolute");
-        $("#canvas").append(node);
+    function addNodeToCanvas(node)
+    {
+        switch (node.type)
+        {
+            case "youtube":
+                window.world.addNodeToWorld(getYouTubePlayer({
+                    x: node.x,
+                    y: node.y,
+                    result: node.result,
+                    id: node.id,
+                    inNodeIds: node.inNodes,
+                    outNodeIds: node.outNodes
+                }));
+                break;
+            case "page":
+
+                break;
+        }
     }
 });
 

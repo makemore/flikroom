@@ -30,8 +30,9 @@ module.exports = {
                     //res.redirect('/room/edit');
                     console.log("not updated");
                 }
-                console.log("saved");
-                console.log(updatedNode);
+
+                Node.publishUpdate(node.id, reference, req.socket);
+
                 res.send(updatedNode);
             });
         };

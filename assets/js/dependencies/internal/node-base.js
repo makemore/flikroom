@@ -14,7 +14,6 @@ var nodeBase = function(params) {
 
     that.setupBase = function(){
         $(".node-close").on("click", that.$el, function(e){
-            that.$el.remove();
             that.delete();
         });
         that.$el.draggable({
@@ -42,7 +41,7 @@ var nodeBase = function(params) {
                 //$(e.currentTarget).find(".node-shield").hide();
             }
         });
-    }
+    };
 
     that.save = function(){
         io.socket.post("/node/", {
@@ -62,6 +61,7 @@ var nodeBase = function(params) {
     }
 
     that.delete = function(){
+        that.$el.remove();
         io.socket.delete("/node/" + that.id, {
             },
             function(response)
@@ -243,6 +243,82 @@ var nodeBase = function(params) {
     };
 
 
+    that.drawLinks = function(){
+        that.drawInLinks();
+        that.drawOutLinks();
+    }
+
+    that.drawInLinks = function(){
+        //loop through all in and out nodes and see if they are already drawn on the page properly..
+        if (that.inNodeIds != undefined) {
+            for (var i = 0; i < that.inNodeIds.length; i++) {
+                var existingLink = world.getLinkByIds(that.id, that.inNodeIds[i]);
+                if (existingLink == null) {
+
+                    var otherObject = world.getNodeById(that.inNodeIds[i]);
+                    //get other object
+
+                    if (otherObject == undefined)
+                    {
+                        console.log("other object not ready yet");
+                        return;
+                    }
+                    //check in list and add nodes if exists
+
+                    var otherInBool = otherObject.isIdInInNodes(that.id);
+                    //looking to see if Id exists in input list or output list
+                    if (otherInBool) {
+                        that.addLink(that.id, true, that.inNodeIds[i], true);
+                    }
+
+                    //check out list and add nodes if exists
+
+                    var otherOutBool = otherObject.isIdInOutNodes(that.id);
+                    //looking to see if Id exists in input list or output list
+                    if (otherOutBool) {
+                        that.addLink(that.id, true, that.inNodeIds[i], false);
+                    }
+
+                } else {
+                    console.log("link already exists");
+                }
+            }
+        }
+    }
+
+    that.drawOutLinks = function(){
+        if (that.outNodeIds != undefined) {
+            for (var i = 0; i < that.outNodeIds.length; i++) {
+                var existingLink = world.getLinkByIds(that.id, that.outNodeIds[i]);
+                if (existingLink == null) {
+                    var otherObject = world.getNodeById(that.outNodeIds[i]);
+                    //get other object
+
+                    if (otherObject == undefined)
+                    {
+                        console.log("other object not ready yet");
+                        return;
+                    }
+                    //check in list and add nodes if exists
+
+                    var otherInBool = otherObject.isIdInInNodes(that.id);
+                    //looking to see if Id exists in input list or output list
+                    if (otherInBool) {
+                        that.addLink(that.id, true, that.outNodeIds[i], true);
+                    }
+                    //check out list and add nodes if exists
+
+                    var otherOutBool = otherObject.isIdInOutNodes(node.id);
+                    //looking to see if Id exists in input list or output list
+                    if (otherOutBool) {
+                        that.addLink(that.id, true, that.outNodeIds[i], false);
+                    }
+                } else {
+                    console.log("link already exists");
+                }
+            }
+        }
+    }
 
     //io.socket.put("/node/" + id, { x: $(this).css("left"), y: $(this).css("top")}, function(response)
 

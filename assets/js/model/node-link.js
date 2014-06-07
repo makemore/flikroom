@@ -81,11 +81,11 @@ var getNodeLink = function(params){
         }
 
         if (startTop < stopTop) {
-            finalTop = startTop;
-            height = stopTop - startTop;
+            finalTop = startTop - 15;
+            height = stopTop - startTop + 15; // Modifications here compensate for width of line
         } else {
-            finalTop = stopTop;
-            height = startTop - stopTop;
+            finalTop = stopTop - 15;
+            height = startTop - stopTop + 15;
         }
 
         if (startLeft > stopLeft && startTop < stopTop)
@@ -113,13 +113,13 @@ var getNodeLink = function(params){
                 width: width,
                 height: height,
                 sX : 0,
-                sY : 0,
+                sY : 10,
                 c1X : width / 2,
-                c1Y : 0,
+                c1Y : 10,
                 c2X : width / 2,
-                c2Y : height,
+                c2Y : height - 10,
                 eX : width,
-                eY : height
+                eY : height - 10
             });
         } else {
             that.center = $.tmpl($("#tmpl-node-path").html(), {
@@ -128,13 +128,13 @@ var getNodeLink = function(params){
                 width: width,
                 height: height,
                 sX : 0,
-                sY : height,
+                sY : height - 10,
                 c1X : width / 2,
-                c1Y : height,
+                c1Y : height - 10,
                 c2X : width / 2,
-                c2Y : 0,
+                c2Y : 10,
                 eX : width,
-                eY : 0
+                eY : 10
             });
         }
 
@@ -162,7 +162,6 @@ var getNodeLink = function(params){
 
         }
 
-        console.trace();
 
 
 
