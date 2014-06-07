@@ -5,11 +5,15 @@ var getNodeLink = function(params){
     that.startInput = params.startInput;
     that.endInput = params.endInput;
 
-    console.log(that.startId);
-    console.log(that.endId);
+    that.el = null;
+
+    that.id = world.getNextClientId();
+
+
+    that.center = {};
 
     that.init = function(){
-        var center;
+
 
 
         var startingIn = true;
@@ -17,12 +21,17 @@ var getNodeLink = function(params){
         // Starting setup from ID
         var startPlayer = $("#node-" + that.startId);
 
+        if (startPlayer.length == 0)
+        {
+            console.log("startingPlayer doesn't exist yet");
+            return;
+        }
+
         var startLeft = startPlayer.css("left").split("px")[0];
         var startTop = startPlayer.css("top").split("px")[0];
+
         startLeft = parseInt(startLeft);
         startTop = parseInt(startTop) + startPlayer.height();
-
-        console.log(that.startInput);
 
         if (!that.startInput)
         {
@@ -32,7 +41,15 @@ var getNodeLink = function(params){
 
         //ending setup from id
 
+
+
         var endingPlayer = $("#node-" + that.endId);
+
+        if (endingPlayer.length == 0)
+        {
+            console.log("startingPlayer doesn't exist yet");
+            return;
+        }
 
         var stopLeft = endingPlayer.css("left").split("px")[0];
         var stopTop = endingPlayer.css("top").split("px")[0];
@@ -87,9 +104,10 @@ var getNodeLink = function(params){
         //Final rendering
 
 
+
         if (topLeftToBottomRight)
         {
-            center = $.tmpl($("#tmpl-node-path").html(), {
+            that.center = $.tmpl($("#tmpl-node-path").html(), {
                 left: finalLeft,
                 top: finalTop,
                 width: width,
@@ -104,7 +122,7 @@ var getNodeLink = function(params){
                 eY : height
             });
         } else {
-            center = $.tmpl($("#tmpl-node-path").html(), {
+            that.center = $.tmpl($("#tmpl-node-path").html(), {
                 left: finalLeft,
                 top: finalTop,
                 width: width,
@@ -119,11 +137,42 @@ var getNodeLink = function(params){
                 eY : 0
             });
         }
-        that.el = $(center)[0];
-        $("#canvas").append(that.el);
+
+        if (that.el === null)
+        {
+            that.el = $(that.center);
+            $("#canvas").append(that.el);
+            that.el = $(that.el);
+            //referenceCheck = that.el;
+
+
+
+        } else
+        {
+//            //console.log($(that.el));
+            //$("#link-" + that.id).remove(); //hacky as shit, but should work.
+
+            that.el[0].remove();
+            //referenceCheck = $(that.el);
+            //referenceCheck.remove();
+
+            //$(that.el).remove();
+            that.el = $(that.center);
+            $("#canvas").append(that.el);
+
+        }
+
+        console.trace();
+
+
+
     }
 
-    that.init();
+
+    that.render = function(){
+        console.log("preparing to re-render");
+    }
+
     return that;
 }
 

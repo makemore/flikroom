@@ -1,47 +1,3 @@
-/**
- * Created by chris on 10/05/2014.
- */
-
-/*
- //Define a functional object to hold persons in JavaScript
- var Person = function(name) {
- this.name = name;
- };
-
- //Add dynamically to the already defined object a new getter
- Person.prototype.getName = function() {
- return this.name;
- };
-
- //Create a new object of type Person
- var john = new Person("John");
-
- //Try the getter
- alert(john.getName());
-
- //If now I modify person, also John gets the updates
- Person.prototype.sayMyName = function() {
- alert('Hello, my name is ' + this.getName());
- };
-
- //Call the new method on john
- john.sayMyName();
-
- */
-
-
-/*
-
- that.id = params.id; //just pure ID
- that.x = params.x;
- that.y = params.y;
- that.type = params.type;
- that.$el = params.$el;
- that.result = params.result;
- that.local = params.local;
- */
-
-
 // x, y, result, id
 var getYouTubePlayer = function(params) {
 
@@ -52,7 +8,9 @@ var getYouTubePlayer = function(params) {
         y: params.y,
         type: "youtube",
         result: params.result,
-        id: params.id
+        id: params.id,
+        inNodeIds: params.inNodeIds,
+        outNodeIds: params.outNodeIds
     });
 
     // Give the baby away

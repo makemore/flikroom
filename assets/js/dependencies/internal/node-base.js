@@ -9,13 +9,39 @@ var nodeBase = function(params) {
     that.local = params.local;
     that.inNodes = [];
     that.outNodes = [];
+    that.inNodeIds = params.inNodeIds;
+    that.outNodeIds = params.outNodeIds;
 
     that.setupBase = function(){
         $(".node-close").on("click", that.$el, function(e){
             that.$el.remove();
             that.delete();
         });
-        that.$el.draggable({ handle: ".node-menu" });
+        that.$el.draggable({
+            handle: ".node-menu",
+            drag: function(e) {
+                var target = $(e.target);
+                var id = target.attr("id").split("-")[1];
+                io.socket.put("/node/" + id, { x: $(this).css("left"), y: $(this).css("top")}, function(response)
+                {
+                    //console.log(response);
+                });
+                for (var i = 0; i < that.inNodes.length; i++){
+                    that.inNodes[i].init();
+                }
+                for (var i = 0; i < that.outNodes.length; i++){
+                    that.outNodes[i].init();
+                }
+            },
+            start: function(e){
+                //$(e.currentTarget).find(".node-shield").show();
+                $(".node-shield").show();
+            },
+            stop: function(e){
+                $(".node-shield").hide();
+                //$(e.currentTarget).find(".node-shield").hide();
+            }
+        });
     }
 
     that.save = function(){
@@ -63,7 +89,7 @@ var nodeBase = function(params) {
             //alert("here");
             //<path d="M78,303 C215,298 246,90 406,372" />
             //var path = document.createElement("path");
-            console.log("mousedown");
+
 
             var player = $(e.currentTarget).parent().parent();
 
@@ -73,11 +99,6 @@ var nodeBase = function(params) {
 
             if ($(e.currentTarget).hasClass("handle-output")) {
                 window.world.startInput = false;
-                console.log("output");
-            }
-            else
-            {
-                console.log("input");
             }
 
             e.preventDefault();
@@ -91,7 +112,6 @@ var nodeBase = function(params) {
 
 
         that.$el.find(".node-handle").on("mouseup", function (e) {
-            console.log("mouseup");
             //need to work out top left position
             //then just extend width and height of div based on bottom right
 
@@ -103,11 +123,6 @@ var nodeBase = function(params) {
 
             if ($(e.currentTarget).hasClass("handle-output")) {
                 endInput = false;
-                console.log("output");
-            }
-            else
-            {
-                console.log("input");
             }
 
 
@@ -116,18 +131,41 @@ var nodeBase = function(params) {
             //This is a problem.. need to be able to wire up across instances..
 
 
-            console.log(window.world.startId);
-
             endId = $(player).attr("id").split('-')[1];
 
+            that.addLink(window.world.startId, window.world.startInput, endId, endInput);
 
 
-            var startNode = window.world.getNodeById(window.world.startId);
+            //This is a bit ropey, lots of duplicate code.
+            that.saveNodeLink(getNodeLink({ startId: window.world.startId, endId: endId, startInput: window.world.startInput, endInput: endInput }))
+        });
 
+    };
+
+    that.addLink = function(startId, startInput, endId, endInput){
+
+
+
+        var existingLink = window.world.getLinkByIds(startId,endId);
+
+
+        if (existingLink == null) {
+
+            var startNode = window.world.getNodeById(startId);
             var endNode = window.world.getNodeById(endId);
 
+            if (startNode == null || endNode == null)
+            {
+                console.log("half of a link doesn't exist yet");
+                return;
+            }
 
-            var nodeLink = getNodeLink({ startId:window.world.startId, endId:endId, startInput:window.world.startInput, endInput:endInput });
+            var nodeLink = getNodeLink({ startId: startId, endId: endId, startInput: startInput, endInput: endInput });
+
+            nodeLink.init(); //Init out here, rather than automatically on constructor//working now..
+
+
+            window.world.addLinkToWorld(nodeLink);
 
             if (window.world.startInput) {
                 startNode.addInNode(nodeLink);
@@ -135,45 +173,76 @@ var nodeBase = function(params) {
                 startNode.addOutNode(nodeLink);
             }
 
-            if (endingIn) {
+            if (endInput) {
                 endNode.addInNode(nodeLink);
             } else {
                 endNode.addOutNode(nodeLink);
             }
-        });
-
+        }
+        else
+        {
+            console.log("linkAlreadyDrawnOnCanvas");
+        }
     }
+
 
     that.addInNode = function(nodeLink){
         that.inNodes.push(nodeLink);
-        console.log(nodeLink);
+    };
 
-        //a node link will always contain it own id, and the other. The other should always be added.
+    that.addOutNode = function(nodeLink){
+        that.outNodes.push(nodeLink);
+    };
 
-        var idToSend = 0;
-        if (nodeLink.startId == that.id)
+    that.isIdInInNodes = function(id){
+
+       if (this.inNodeIds === undefined)
+       {
+           return false;
+       }
+
+       var id = $.grep(this.inNodeIds, function(e){ return e == id; })[0];
+
+       if (id)
+       {
+           return true;
+       }
+       else
+       {
+           return false;
+       }
+    }
+
+    that.isIdInOutNodes = function(id){
+        if (this.outNodeIds === undefined)
         {
-            idToSend = nodeLink.endId
-        } else
-        {
-            idToSend = nodeLink.startId;
+            return false;
         }
+        var id = $.grep(this.outNodeIds, function(e){ return e == id; })[0];
+        if (id)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
 
+    that.saveNodeLink = function(nodeLink){
+        //a node link will always contain it own id, and the other. The other should always be added.
         io.socket.request("/node/addNodeLink", {
             startId: nodeLink.startId,
             startInput : nodeLink.startInput,
             endId : nodeLink.endId,
             endInput : nodeLink.endInput
         }, function(response){
-            console.log(response);
+            //console.log(response);
         });
+    };
 
-    }
 
-    that.addOutNode = function(nodeLink){
-        that.outNodes.push(nodeLink);
-    }
 
     //io.socket.put("/node/" + id, { x: $(this).css("left"), y: $(this).css("top")}, function(response)
 

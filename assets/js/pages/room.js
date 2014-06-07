@@ -34,7 +34,7 @@ $.fn.pressEnter = function(fn) {
 
 $(document).ready(function(){
 
-    window.world = new World();
+    window.world = getWorld();
 
 
     $("#canvas").draggable();
@@ -69,7 +69,14 @@ $(document).ready(function(){
             switch (nodes[i].type)
             {
                 case "youtube":
-                    window.world.addNodeToWorld(getYouTubePlayer({ x: nodes[i].x,y: nodes[i].y, result: nodes[i].result, id: nodes[i].id }));
+                    window.world.addNodeToWorld(getYouTubePlayer({
+                        x: nodes[i].x,
+                        y: nodes[i].y,
+                        result: nodes[i].result,
+                        id: nodes[i].id,
+                        inNodeIds: nodes[i].inNodes,
+                        outNodeIds: nodes[i].outNodes
+                    }));
                 break;
                 case "page":
 

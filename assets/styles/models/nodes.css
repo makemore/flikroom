@@ -1,6 +1,8 @@
 .node-youtube-player{
     position: absolute;
     z-index:100;
+    width: 340px;
+    height:329px;
 }
 
 .node-web-page{
@@ -10,6 +12,20 @@
     background-color: white;
     color:black;
     z-index:100;
+}
+
+.node-title{
+    width: 96%;
+    overflow-x: hidden;
+    float: left;
+}
+
+.node-shield{
+    position: absolute;
+    /*background-color: red;*/
+    display: none;
+    width:100%;
+    height:100%;
 }
 
 .node-menu{

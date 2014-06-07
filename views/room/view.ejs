@@ -55,7 +55,8 @@
 
 <script type="text/x-handlebars-template" id="tmpl-node-base">
     <div class='{{className}}' style="left:{{left}}px; top:{{top}}px;" id="node-{{id}}">
-        <div class="node-menu">{{title}}<div class="node-close">X</div></div>
+        <div class="node-shield"></div>
+        <div class="node-menu"><div class="node-title">{{title}}</div><div class="node-close">X</div></div>
         {{{body}}}
         <div class="node-footer">
             <div class="node-handle handle-input"></div>
