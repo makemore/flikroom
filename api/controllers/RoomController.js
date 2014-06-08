@@ -68,7 +68,7 @@ var RoomController = {
             if (!room) return res.send("room " + req.params.id + " not found", 404);
             if (room.numberOfUsers === undefined) room.numberOfUsers = 0;
             console.log(room.numberOfUsers);
-            room.publishUpdate(req.params.id, {numberOfUsers: room.numberOfUsers++ }, req.socket);
+            //room.publishUpdate(req.params.id, {numberOfUsers: room.numberOfUsers++ }, req.socket);
 
         });
 
