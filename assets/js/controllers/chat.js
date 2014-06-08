@@ -111,7 +111,7 @@ flikApp.controller('ChatCtrl', function ($scope, socket) {
             if (userId === undefined)
             {
                 if (window.world.localName === undefined) {
-                    window.world.localName = prompt("Please enter your name", "Chaz");
+                    window.world.localName = prompt("Please enter your name");
 
                     if (window.world.localName == null) {
                         alert("must set name");
