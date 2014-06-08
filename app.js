@@ -21,21 +21,6 @@
 //Non blocking array contains method, for node specifically.
 
 
-Array.prototype.contains = function(k, callback) {
-    var self = this;
-    return (function check(i) {
-        if (i >= self.length) {
-            return callback(false);
-        }
-
-        if (self[i] === k) {
-            return callback(true);
-        }
-
-        return process.nextTick(check.bind(null, i+1));
-    }(0));
-}
-
 // Ensure a "sails" can be located:
 var sails;
 try {
@@ -69,3 +54,18 @@ try {
 
 // Start server
 sails.lift(rc('sails'));
+
+Array.prototype.contains = function(k, callback) {
+    var self = this;
+    return (function check(i) {
+        if (i >= self.length) {
+            return callback(false);
+        }
+
+        if (self[i] === k) {
+            return callback(true);
+        }
+
+        return process.nextTick(check.bind(null, i+1));
+    }(0));
+}
