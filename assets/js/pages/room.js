@@ -44,6 +44,10 @@ $(document).ready(function(){
 
     window.world = getWorld();
 
+    setTimeout(function(){
+        dat.GUI.toggleHide();
+    },1000);
+
     $("#canvas").draggable();
     $(".thing").draggable();
     var width = $("#canvas").width();
