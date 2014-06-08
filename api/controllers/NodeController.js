@@ -42,21 +42,21 @@ module.exports = {
             if (!node) return res.send("node " + startId + " not found", 404);
 
             if (startInput) {
-                if (node.inNodes === undefined) node.inNodes = [];
-                if (node.inNodes.indexOf(endId) >= 0) {
+                if (node.inNodeIds === undefined) node.inNodeIds = [];
+                if (node.inNodeIds.indexOf(endId) >= 0) {
                     res.send({response: "link already in node"});
                 } else {
-                    node.inNodes.push(endId)
-                    saveThing(node, {inNodes: node.inNodes });
+                    node.inNodeIds.push(endId)
+                    saveThing(node, {inNodeIds: node.inNodeIds });
                 }
             } else {
-                if (node.outNodes === undefined) node.outNodes = [];
-                if (node.outNodes.indexOf(endId) >= 0) {
+                if (node.outNodeIds === undefined) node.outNodeIds = [];
+                if (node.outNodeIds.indexOf(endId) >= 0) {
                     res.send({response: "link already in node"});
                 } else {
-                    node.outNodes.push(endId);
+                    node.outNodeIds.push(endId);
                     console.log(node);
-                    saveThing(node, {outNodes: node.outNodes });
+                    saveThing(node, {outNodeIds: node.outNodeIds });
                 }
             }
         });
@@ -66,21 +66,21 @@ module.exports = {
             if (!node) return res.send("node " + endId + " not found", 404);
 
             if (endInput) {
-                if (node.inNodes === undefined) node.inNodes = [];
-                if (node.inNodes.indexOf(startId) >= 0) {
+                if (node.inNodeIds === undefined) node.inNodeIds = [];
+                if (node.inNodeIds.indexOf(startId) >= 0) {
                     res.send({response: "link already in node"});
                 } else {
-                    node.inNodes.push(startId)
-                    saveThing(node, {inNodes: node.inNodes });
+                    node.inNodeIds.push(startId)
+                    saveThing(node, {inNodeIds: node.inNodeIds });
                 }
             } else {
-                if (node.outNodes === undefined) node.outNodes = [];
-                if (node.outNodes.indexOf(startId) >= 0) {
+                if (node.outNodeIds === undefined) node.outNodeIds = [];
+                if (node.outNodeIds.indexOf(startId) >= 0) {
                     res.send({response: "link already in node"});
                 } else {
-                    node.outNodes.push(startId);
+                    node.outNodeIds.push(startId);
                     console.log(node);
-                    saveThing(node, {outNodes: node.outNodes });
+                    saveThing(node, {outNodeIds: node.outNodeIds });
                 }
             }
         });

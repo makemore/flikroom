@@ -66,7 +66,7 @@ var nodeBase = function(params) {
             },
             function(response)
             {
-                console.log(response);
+                //console.log(response);
             });
     }
 
@@ -254,29 +254,45 @@ var nodeBase = function(params) {
             for (var i = 0; i < that.inNodeIds.length; i++) {
                 var existingLink = world.getLinkByIds(that.id, that.inNodeIds[i]);
                 if (existingLink == null) {
-
+                    console.log("here");
+                    console.log(that.inNodeIds[i]);
                     var otherObject = world.getNodeById(that.inNodeIds[i]);
                     //get other object
+
+                    testingObject = otherObject;
 
                     if (otherObject == undefined)
                     {
                         console.log("other object not ready yet");
-                        return;
+                        break; //skip this loop cycle
                     }
                     //check in list and add nodes if exists
 
+
+
                     var otherInBool = otherObject.isIdInInNodes(that.id);
                     //looking to see if Id exists in input list or output list
+
                     if (otherInBool) {
                         that.addLink(that.id, true, that.inNodeIds[i], true);
                     }
+                    else
+                    {
+                        console.log("id not in partner in nodes");
+                    }
+
 
                     //check out list and add nodes if exists
-
+                    console.log(that.id);
                     var otherOutBool = otherObject.isIdInOutNodes(that.id);
+
                     //looking to see if Id exists in input list or output list
                     if (otherOutBool) {
                         that.addLink(that.id, true, that.inNodeIds[i], false);
+                    }
+                    else
+                    {
+                        console.log("id not in partner out nodes");
                     }
 
                 } else {
@@ -297,7 +313,7 @@ var nodeBase = function(params) {
                     if (otherObject == undefined)
                     {
                         console.log("other object not ready yet");
-                        return;
+                        break; //skip this loop cycle
                     }
                     //check in list and add nodes if exists
 
@@ -306,13 +322,22 @@ var nodeBase = function(params) {
                     if (otherInBool) {
                         that.addLink(that.id, true, that.outNodeIds[i], true);
                     }
+                    else
+                    {
+                        console.log("id not in partner in nodes");
+                    }
                     //check out list and add nodes if exists
 
-                    var otherOutBool = otherObject.isIdInOutNodes(node.id);
+                    var otherOutBool = otherObject.isIdInOutNodes(that.id);
                     //looking to see if Id exists in input list or output list
                     if (otherOutBool) {
                         that.addLink(that.id, true, that.outNodeIds[i], false);
                     }
+                    else
+                    {
+                        console.log("id not in partner out nodes");
+                    }
+
                 } else {
                     console.log("link already exists");
                 }

@@ -16,10 +16,10 @@ module.exports = {
       user:{
           model: 'user'
       },
-      inNodes: {
+      inNodeIds: {
           type: 'array'
       },
-      outNodes: {
+      outNodeIds: {
           type: 'array'
       },
       type: {

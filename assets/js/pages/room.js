@@ -51,7 +51,6 @@ $(document).ready(function(){
 
     io.socket.on("node", function(node){
         console.log(node);
-        console.log(node.data.inNodes);
         if (node.verb == "created" && node.data.room == roomId) {
             addNodeToCanvas(node.data);
         }
@@ -66,6 +65,7 @@ $(document).ready(function(){
             $("#node-" + node.id).css("left", node.data.x);
             $("#node-" + node.id).css("top", node.data.y);
 
+            /*
             for (var i = 0; i < nodeFromWorld.inNodes.length; i++) {
                 nodeFromWorld.inNodes[i].init();
             }
@@ -73,24 +73,18 @@ $(document).ready(function(){
             for (var i = 0; i < nodeFromWorld.outNodes.length; i++) {
                 nodeFromWorld.outNodes[i].init();
             }
-
+            */
         }
-        else if (node.verb == "updated" && node.data.inNodes != undefined)
+        else if (node.verb == "updated" && node.data.inNodeIds != undefined)
         {
             var nodeFromWorld = window.world.getNodeById(node.id);
-            nodeFromWorld.inNodeIds = node.data.inNodes;
-            console.log(nodeFromWorld);
-            setTimeout(function(){
-                nodeFromWorld.drawInLinks();
-            },1000);
+            nodeFromWorld.inNodeIds = node.data.inNodeIds;
+            nodeFromWorld.drawLinks();
 
-        } else if (node.verb == "updated" && node.data.outNodes != undefined) {
+        } else if (node.verb == "updated" && node.data.outNodeIds != undefined) {
             var nodeFromWorld = window.world.getNodeById(node.id);
-            nodeFromWorld.outNodes = node.data.outNodes;
-            console.log(nodeFromWorld);
-            setTimeout(function(){
-                nodeFromWorld.drawOutLinks();
-            },1000);
+            nodeFromWorld.outNodeIds = node.data.outNodeIds;
+            nodeFromWorld.drawLinks();
         }
 
         else if (node.verb == "destroyed")
@@ -101,7 +95,6 @@ $(document).ready(function(){
     });
 
     io.socket.request("/node?room=" + roomId, null, function(nodes){
-        console.log(nodes);
         for (var i = 0; i < nodes.length; i++)
         {
            addNodeToCanvas(nodes[i]);
