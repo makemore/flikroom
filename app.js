@@ -19,6 +19,8 @@
  */
 
 //Non blocking array contains method, for node specifically.
+
+/*
 Array.prototype.contains = function(k, callback) {
     var self = this;
     return (function check(i) {
@@ -32,7 +34,7 @@ Array.prototype.contains = function(k, callback) {
 
         return process.nextTick(check.bind(null, i+1));
     }(0));
-}
+}*/
 
 // Ensure a "sails" can be located:
 var sails;
