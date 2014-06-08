@@ -56,6 +56,10 @@ $(document).ready(function(){
         var omni = new OmniBox("omni",e.offsetX,e.offsetY);
     });
 
+    io.socket.on("room", function(room) {
+        console.log(room);
+    });
+
     io.socket.on("node", function(node){
         console.log(node);
         if (node.verb == "created" && node.data.room == roomId) {

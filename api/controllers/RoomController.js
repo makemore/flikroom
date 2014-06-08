@@ -59,9 +59,21 @@ var RoomController = {
          //});
          room.subscribe(req.socket);
          });*/
-
+        Room.watch(req);
         Chat.watch(req);
         Node.watch(req);
+
+        Room.findOne(req.params.id, function roomFound(err, room) {
+            if (err) return res.sender(err, 500);
+            if (!room) return res.send("room " + req.params.id + " not found", 404);
+            if (room.numberOfUsers === undefined) room.numberOfUsers = 0;
+            console.log(room.numberOfUsers);
+            room.publishUpdate(req.params.id, {numberOfUsers: room.numberOfUsers++ }, req.socket);
+
+        });
+
+
+
         //Chat.find().exec(function (err, chats) {
         // Subscribe the requesting socket (e.g. req.socket) to all users (e.g. users)
         //});

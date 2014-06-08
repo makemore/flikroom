@@ -76,7 +76,9 @@ flikApp.controller('ChatCtrl', function ($scope, socket) {
         $scope.chats = chats;
     });
 
-    socket.request("/room/join", function(gotResponse) {
+    console.log(roomId);
+
+    socket.request("/room/join/" + roomId, function(gotResponse) {
         // we don’t really care about the response
     });
 

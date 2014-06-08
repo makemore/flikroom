@@ -14,7 +14,8 @@ module.exports = {
       chats:{
           collection: 'chat',
           via: 'room'
-      }
+      },
+      numberOfUsers: {type: "integer"}
   }
 };
 
