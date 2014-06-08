@@ -170,6 +170,15 @@ var getNodeLink = function(params){
 
     that.render = function(){
         console.log("preparing to re-render");
+        //Not using this just, just being slack and running the whole thing again.
+    }
+
+    that.remove = function(){
+        console.log("removing link");
+        that.el.remove();
+        that.el = null;
+        var positionInArray = arrayObjectIndexOf(window.world.links, that.id, "id");
+        window.world.links[positionInArray] = null; //should delete the reference to the object??
     }
 
     return that;

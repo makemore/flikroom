@@ -11,6 +11,7 @@ module.exports = {
 
   attributes: {
       message  : { type: 'string', unique: false },
+      localName  : { type: 'string', unique: false },
       room:{
           model: 'room'
       },

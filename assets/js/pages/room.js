@@ -26,6 +26,14 @@ $.fn.pressEnter = function(fn) {
     });
 };
 
+function arrayObjectIndexOf(myArray, searchTerm, property) {
+    for(var i = 0, len = myArray.length; i < len; i++) {
+        if (myArray[i][property] === searchTerm) return i;
+    }
+    return -1;
+}
+
+
 //new DragDivScroll('canvasContainer');
 
 //Not using that above, as better to have less dependencies.
@@ -35,7 +43,6 @@ $.fn.pressEnter = function(fn) {
 $(document).ready(function(){
 
     window.world = getWorld();
-
 
     $("#canvas").draggable();
     $(".thing").draggable();
@@ -65,7 +72,7 @@ $(document).ready(function(){
             $("#node-" + node.id).css("left", node.data.x);
             $("#node-" + node.id).css("top", node.data.y);
 
-            /*
+            //move any associated links
             for (var i = 0; i < nodeFromWorld.inNodes.length; i++) {
                 nodeFromWorld.inNodes[i].init();
             }
@@ -73,18 +80,28 @@ $(document).ready(function(){
             for (var i = 0; i < nodeFromWorld.outNodes.length; i++) {
                 nodeFromWorld.outNodes[i].init();
             }
-            */
+
         }
         else if (node.verb == "updated" && node.data.inNodeIds != undefined)
         {
             var nodeFromWorld = window.world.getNodeById(node.id);
             nodeFromWorld.inNodeIds = node.data.inNodeIds;
-            nodeFromWorld.drawLinks();
+            setTimeout(function(){
+                nodeFromWorld.drawLinks();
+                nodeFromWorld.drawLinks(); //Dirty and hacky as shit, but it works and proved that this method would work. Needs refactor to event based update.
+                nodeFromWorld.drawLinks();
+            },1000);
+
 
         } else if (node.verb == "updated" && node.data.outNodeIds != undefined) {
             var nodeFromWorld = window.world.getNodeById(node.id);
             nodeFromWorld.outNodeIds = node.data.outNodeIds;
-            nodeFromWorld.drawLinks();
+            setTimeout(function(){
+                nodeFromWorld.drawLinks();
+                nodeFromWorld.drawLinks(); //Dirty and hacky as shit, but it works and proved that this method would work. Needs refactor to event based update.
+                nodeFromWorld.drawLinks();
+            },1000)
+
         }
 
         else if (node.verb == "destroyed")
@@ -113,8 +130,8 @@ $(document).ready(function(){
                     y: node.y,
                     result: node.result,
                     id: node.id,
-                    inNodeIds: node.inNodes,
-                    outNodeIds: node.outNodes
+                    inNodeIds: node.inNodeIds,
+                    outNodeIds: node.outNodeIds
                 }));
                 break;
             case "page":

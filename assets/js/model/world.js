@@ -22,14 +22,14 @@ var getWorld = function(){
     }
 
     world.getLinkByIds = function(id1, id2){
-        var firstDirection = $.grep(this.links, function(e){ return (e.startId == id1 && e.endId == id2); })[0];
+        var firstDirection = $.grep(world.links, function(e){ return (e.startId == id1 && e.endId == id2); })[0];
         if (firstDirection != null)
         {
             return firstDirection;
         }
         else
         {
-            var secondDirection = $.grep(this.links, function(e){ return (e.startId == id2 && e.endId == id1); })[0];
+            var secondDirection = $.grep(world.links, function(e){ return (e.startId == id2 && e.endId == id1); })[0];
             return secondDirection;
         }
     }

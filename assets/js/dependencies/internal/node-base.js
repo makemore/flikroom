@@ -62,12 +62,19 @@ var nodeBase = function(params) {
 
     that.delete = function(){
         that.$el.remove();
+        that.$el = null;
+
         io.socket.delete("/node/" + that.id, {
             },
             function(response)
             {
                 //console.log(response);
+                that.removeLinks()
+
+                var positionInArray = arrayObjectIndexOf(window.world.nodes, that.id, "id");
+                window.world.nodes[positionInArray] = null; //should delete the reference to the object??
             });
+
     }
 
     that.setupLinking = function() {
@@ -242,6 +249,15 @@ var nodeBase = function(params) {
         });
     };
 
+
+    that.removeLinks = function(){
+        for (var i = 0; i < that.inNodes.length; i++) {
+            that.inNodes[i].remove();
+        }
+        for (var i = 0; i < that.outNodes.length; i++) {
+            that.outNodes[i].remove();
+        }
+    }
 
     that.drawLinks = function(){
         that.drawInLinks();

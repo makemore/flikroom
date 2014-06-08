@@ -24,10 +24,23 @@ var RoomController = {
         Room.find(id, function roomFound(err, room) {
             if(err) return res.sender(err,500);
             if(!room) return res.send("Room "+id+" not found", 404);
-            res.view({
-                "room":room[0],
-                "userId": req.session.user
-            })
+
+
+            if (req.session.user === undefined) {
+                res.view({
+                    "room": room[0],
+                    "userId": req.session.user,
+                    "userName" : undefined
+                });
+            }
+            else
+            {
+                res.view({
+                    "room": room[0],
+                    "userId": req.session.user,
+                    "userName" : req.session.user.username
+                });
+            }
         });
 
     },
