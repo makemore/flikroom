@@ -17,6 +17,31 @@ html, body
     height:10000px;
 }
 
+#modal-choice-container{
+    position: fixed;
+    height:200px;
+    left:50px;
+    top: 50px;
+    z-index:1000;
+    color:white;
+    display: none;
+}
+
+.modal-choice{
+    padding-bottom: 10px;
+}
+.modal-image{
+    display:inline-block;
+    background-size: contain;
+    width:80px;
+    height:60px;
+}
+
+.modal-title{
+    display: inline-block;
+    background-color: #333;
+}
+
 .node{
     width:100px;
     height:100px;

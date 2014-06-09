@@ -135,7 +135,7 @@ var getYouTubePlayer = function(params) {
             }
             else if (youtubePlayer.outNodeObjects.length > 1)
             {
-                alert("more than 1 route to pick from, need to show you to ask");
+                youtubePlayer.showChoices(youtubePlayer.outNodeObjects);
             }
         }
 
@@ -153,7 +153,29 @@ var getYouTubePlayer = function(params) {
         }
 
 
+        youtubePlayer.showChoices = function(potentialNodes){
 
+            $("#modal-choice-container").show();
+
+            for (var i = 0; i < potentialNodes.length; i++)
+            {
+                console.log(i);
+                var option = $.tmpl($("#tmpl-modal-choice").html(), {
+                    image: potentialNodes[i].result.image,
+                    title: potentialNodes[i].result.title,
+                    id: i
+                })[0].outerHTML;
+                option = $(option);
+                $("#modal-choice-container").append(option);
+
+                option.on("click", function(){
+                    youtubePlayer.stop();
+                    potentialNodes[$(this).data("id")].play();
+                    $("#modal-choice-container").html("");
+                    $("#modal-choice-container").hide();
+                });
+            }
+        }
 
 
 
