@@ -156,7 +156,6 @@ var getYouTubePlayer = function(params) {
         youtubePlayer.showChoices = function(potentialNodes){
 
             $("#modal-choice-container").show();
-
             for (var i = 0; i < potentialNodes.length; i++)
             {
                 console.log(i);
