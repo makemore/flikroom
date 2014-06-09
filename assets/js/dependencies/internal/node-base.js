@@ -7,10 +7,12 @@ var nodeBase = function(params) {
     //that.$el = params.$el; set in child object
     that.result = params.result;
     that.local = params.local;
-    that.inNodes = [];
-    that.outNodes = [];
+    that.inNodes = []; // this should be renamed to inNodeLinks
+    that.outNodes = []; // same for this
     that.inNodeIds = params.inNodeIds;
     that.outNodeIds = params.outNodeIds;
+    that.inNodeObjects = [];
+    that.outNodeObjects = [];
 
     that.setupBase = function(){
         $(".node-close").on("click", that.$el, function(e){
@@ -151,10 +153,7 @@ var nodeBase = function(params) {
 
     that.addLink = function(startId, startInput, endId, endInput){
 
-
-
         var existingLink = window.world.getLinkByIds(startId,endId);
-
 
         if (existingLink == null) {
 
@@ -171,19 +170,18 @@ var nodeBase = function(params) {
 
             nodeLink.init(); //Init out here, rather than automatically on constructor//working now..
 
-
             window.world.addLinkToWorld(nodeLink);
 
             if (window.world.startInput) {
-                startNode.addInNode(nodeLink);
+                startNode.addInNode(nodeLink, endNode);
             } else {
-                startNode.addOutNode(nodeLink);
+                startNode.addOutNode(nodeLink, endNode);
             }
 
             if (endInput) {
-                endNode.addInNode(nodeLink);
+                endNode.addInNode(nodeLink, startNode);
             } else {
-                endNode.addOutNode(nodeLink);
+                endNode.addOutNode(nodeLink, startNode);
             }
         }
         else
@@ -193,12 +191,14 @@ var nodeBase = function(params) {
     }
 
 
-    that.addInNode = function(nodeLink){
+    that.addInNode = function(nodeLink, nodeObject){
         that.inNodes.push(nodeLink);
+        that.inNodeObjects.push(nodeObject);
     };
 
-    that.addOutNode = function(nodeLink){
+    that.addOutNode = function(nodeLink, nodeObject){
         that.outNodes.push(nodeLink);
+        that.outNodeObjects.push(nodeObject);
     };
 
     that.isIdInInNodes = function(id){

@@ -72,6 +72,7 @@
     </div>
 
     <div id="info-container">
+        <div class="info-close">X</div>
         <ol>
             <li>Double click on grid to search</li>
             <li>Drag search results onto grid</li>
@@ -95,31 +96,17 @@
     </div>
 </div>
 
+<div id="nav-container">
+    <div id="nav-transport">
+        <div id="nav-back"></div>
+        <div id="nav-play"></div>
+        <div id="nav-forward"></div>
+    </div>
+</div>
+
 <script>
     var roomId = <%= room.id %>;
     var userId = <%= userId %>;
     var userName = <%= userName %>;
 </script>
 
-<script type="text/javascript">
-
-    var FizzyText = function() {
-        this.message = 'dat.gui';
-        this.speed = 0.8;
-        this.displayOutline = false;
-        this.explode = function() {
-
-        };
-        // Define render logic ...
-    };
-
-    window.onload = function() {
-        var text = new FizzyText();
-        var gui = new dat.GUI();
-        gui.add(text, 'message');
-        gui.add(text, 'speed', -5, 5);
-        gui.add(text, 'displayOutline');
-        gui.add(text, 'explode');
-    };
-
-</script>

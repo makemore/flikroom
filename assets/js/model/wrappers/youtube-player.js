@@ -114,6 +114,49 @@ var getYouTubePlayer = function(params) {
             //event.target.playVideo();
         }
 
+        youtubePlayer.play = function(){
+            youtubePlayer.player.playVideo();
+            var x = youtubePlayer.x - (($(window).width() / 2) - (youtubePlayer.$el.width() / 2));
+            var y = youtubePlayer.y - (($(window).height() / 2) - (youtubePlayer.$el.height() / 2));
+            window.world.moveTo(-Math.abs(x),-Math.abs(y));
+            window.world.currentNode = youtubePlayer;
+        }
+
+        youtubePlayer.stop = function() {
+            youtubePlayer.player.stopVideo();
+        }
+
+        youtubePlayer.next = function(){
+            if (youtubePlayer.outNodeObjects.length == 1)
+            {
+                var next = youtubePlayer.outNodeObjects[0];
+                youtubePlayer.stop();
+                next.play();
+            }
+            else if (youtubePlayer.outNodeObjects.length > 1)
+            {
+                alert("more than 1 route to pick from, need to show you to ask");
+            }
+        }
+
+        youtubePlayer.prev = function(){
+            if (youtubePlayer.inNodeObjects.length == 1)
+            {
+                var prev = youtubePlayer.inNodeObjects[0];
+                youtubePlayer.stop();
+                prev.play();
+            }
+            else if (youtubePlayer.outNodeObjects.length > 1)
+            {
+                alert("more than 1 route to pick from, need to show you to ask");
+            }
+        }
+
+
+
+
+
+
         // 5. The API calls this function when the player's state changes.
         //    The function indicates that when playing a video (state=1),
         //    the player should play for six seconds and then stop.
@@ -124,6 +167,13 @@ var getYouTubePlayer = function(params) {
              setTimeout(stopVideo, 6000);
              done = true;
              }*/
+
+            if (event.data == YT.PlayerState.ENDED)
+            {
+                youtubePlayer.next();
+            }
+
+            //console.log(event);
         }
         function stopVideo() {
             youtubePlayer.player.stopVideo();

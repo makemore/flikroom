@@ -10,6 +10,7 @@ var getWorld = function(){
     world.startId;
     world.startInput;
 
+    world.currentNode = null;
 
     world.getNodeById = function(id){
         return $.grep(this.nodes, function(e){ return e.id == id; })[0];
@@ -43,6 +44,16 @@ var getWorld = function(){
         world.nextClientId++;
         return world.nextClientId;
     }
+
+    world.moveTo = function(x,y){
+        $("#canvas").animate({
+            left: x,
+            top: y
+        }, 2000, function() {
+            // Animation complete.
+        });
+    };
+
 
     return world;
 }

@@ -1,0 +1,45 @@
+#nav-container
+{
+    width:100%;
+    height:50px;
+    position: fixed;
+    left:0px;
+    bottom: 0px;
+    background-color:rgba(51,51,51,0.7);
+    z-index: 1000;
+    color:white;
+}
+
+#nav-transport{
+    margin-top:10px;
+    margin-left:10px;
+    height:50px;
+    line-height: 45px;
+    width:70px;
+}
+
+#nav-transport > div{
+    display:inline-block;
+    background-position: center;
+    cursor: pointer;
+}
+
+#nav-back{
+    background-image: url(/images/nav/step_backward.png);
+    width:14px;
+    height:18px;
+    top: -3px;
+    position: relative;
+}
+#nav-play{
+    background-image: url(/images/nav/play_button.png);
+    width: 26px;
+    height: 26px;
+}
+#nav-forward{
+    background-image: url(/images/nav/step_forward.png);
+    width:14px;
+    height:18px;
+    top: -3px;
+    position: relative;
+}

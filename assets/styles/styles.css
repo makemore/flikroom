@@ -12,7 +12,7 @@ html, body
 }
 
 #canvas{
-    background-image: url(/images/repeating-background-black.jpg);
+    background-image: url(/images/repeating-background-black-clean2.png);
     width:10000px;
     height:10000px;
 }
@@ -60,13 +60,20 @@ html, body
 #info-container
 {
     width:300px;
-    height:100px;
+    height:90px;
     position: fixed;
-    left:50px;
-    bottom: 50px;
+    left:10px;
+    bottom: 60px;
     background-color:rgba(51,51,51,0.7);
     z-index: 1000;
     color:white;
+}
+
+.info-close{
+    position: absolute;
+    top:7px;
+    right:10px;
+    cursor: pointer;
 }
 
 #chats{
